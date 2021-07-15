@@ -9,5 +9,6 @@ RUN apt-get -y install nodejs
 RUN npm install
 
 RUN apt-get -y install php-fpm
+RUN service nginx start
 
 EXPOSE 8888

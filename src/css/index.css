@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.score-btn {
+    @apply bg-gray-300 flex h-16 items-center justify-center rounded-full text-black text-xl w-16;
+}
+
+.score-btn:hover {
+    @apply bg-gray-400;
+}

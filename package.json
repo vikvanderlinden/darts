@@ -12,6 +12,7 @@
   "dependencies": {},
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^4.0.3",
+    "@vue/compiler-sfc": "^3.1.4",
     "autoprefixer": "^10.3.0",
     "css-loader": "^5.2.6",
     "cssnano": "^5.0.6",
@@ -22,7 +23,9 @@
     "raw-loader": "^4.0.2",
     "style-loader": "^3.0.0",
     "tailwindcss": "^2.2.4",
-    "vue": "^2.6.14",
+    "vue": "^3.1.4",
+    "vue-loader": "^16.3.0",
+    "vue-template-compiler": "^2.6.14",
     "vuex": "^3.6.2",
     "webpack": "^5.44.0",
     "webpack-cli": "^4.7.2",
