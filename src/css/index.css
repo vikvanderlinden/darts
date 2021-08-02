@@ -3,9 +3,25 @@
 @tailwind utilities;
 
 .score-btn {
-    @apply bg-gray-300 flex h-16 items-center justify-center rounded-full text-black text-xl w-16;
+    @apply bg-gray-700 flex h-16 items-center justify-center rounded-full text-white text-xl w-16;
+}
+
+.score-btn.red-btn {
+    @apply bg-red-700;
+}
+
+.score-btn.green-btn {
+    @apply bg-green-700;
 }
 
 .score-btn:hover {
-    @apply bg-gray-400;
+    @apply bg-gray-800;
+}
+
+.score-btn.red-btn:hover {
+    @apply bg-red-800;
+}
+
+.score-btn.green-btn:hover {
+    @apply bg-green-800;
 }
