@@ -1,12 +1,9 @@
 import User from "@/models/User.js";
 
 export default class Game {
-    #score_regex;
-    #name_regex;
-
     constructor() {
-        this.#score_regex = new RegExp("^([0-9]{1,2}|ib|ob)$");
-        this.#name_regex = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9-_ ]{0,19}$');
+        this.score_regex = new RegExp("^([0-9]{1,2}|ib|ob)$");
+        this.name_regex = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9-_ ]{0,19}$');
 
         this.users = [];
         this.current_user = 0;
@@ -31,7 +28,7 @@ export default class Game {
     }
 
     register_score(score) {
-        if (this.#score_regex.test(score.value) === -1) {
+        if (this.score_regex.test(score.value) === -1) {
             throw Error("Score must be valid value");
         }
 
@@ -126,7 +123,7 @@ export default class Game {
             throw Error("Cannot add users when game is active");
         }
 
-        if (!this.#name_regex.test(name)) {
+        if (!this.name_regex.test(name)) {
             throw Error("The name must be alphanumeric with dashes or underscores and max 20 characters");
         }
 
