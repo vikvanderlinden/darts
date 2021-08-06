@@ -9,7 +9,7 @@ export default {
         title: String,
         selected: Boolean
     },
-    emits: ['click'],
+    emits: ["click"],
 }
 </script>
 
