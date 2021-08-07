@@ -40,12 +40,17 @@
     import ScoreCounter from "@/components/ScoreCounter.vue";
     import ScoreInput from "@/components/ScoreInput.vue";
     import Game from "@/models/Game.ts";
-    import Game from "@/models/Game.js";
+    import OhOneGames from "@/game-variants/OhOneGames.ts";
 
     export default {
         name: "calculator-screen",
         data() {
             let game = new Game();
+            let variants = [
+                new OhOneGames(),
+            ];
+
+            game.set_variant("01-games");
 
             return {
                 game,
@@ -59,7 +64,7 @@
         },
         methods: {
             start_game() {
-                if (this.game.can_start_game()) {
+                if (this.game.can_start) {
                     this.game.start(this.should_shuffle_users);
                 }
             },
