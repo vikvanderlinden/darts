@@ -2,9 +2,9 @@
     <div class="max-w-sm w-full mx-auto p-2">
         <div class="flex items-end" v-if="game.can_start_game()">
             <div class="flex flex-col justify-end items-center w-2/5 flex-grow-0 flex-shrink-0">
-                <div class="text-8xl">{{game.users[game.current_user].score}}</div>
-                <div class="text-6xl">{{game.users[game.current_user].score - game.current_play_score()}}</div>
-                <div class="text-blue-400">Now: {{game.users[game.current_user].name}}</div>
+                <div class="text-8xl">{{game.current_player.score}}</div>
+                <div class="text-6xl">{{game.current_player.score - game.current_play_score()}}</div>
+                <div class="text-blue-400">Now: {{game.current_player.name}}</div>
             </div>
             <div class="w-full ml-4 text-xl w-3/5">
                 <table class="w-full">

@@ -7,13 +7,13 @@
                 href="#"
                 @click.stop.prevent="settings_modal_open=true">Settings</a>
             <a
-                :class="{'bg-red-700 hover:bg-red-800': game.can_start_game(), 'bg-gray-800 pointer-events-none cursor-default': !game.can_start_game()}"
+                :class="{'bg-red-700 hover:bg-red-800': game.can_start, 'bg-gray-800 pointer-events-none cursor-default': !game.can_start}"
                 class="ml-2 px-3 py-2 rounded"
                 href="#"
                 @click.stop.prevent="game.reset()">Reset Game</a>
             <a
                 v-if="!game.game_started"
-                :class="{'bg-green-700 hover:bg-green-800': game.can_start_game(), 'bg-gray-800 pointer-events-none cursor-default': !game.can_start_game()}"
+                :class="{'bg-green-700 hover:bg-green-800': game.can_start, 'bg-gray-800 pointer-events-none cursor-default': !game.can_start}"
                 class="ml-2 px-3 py-2 rounded"
                 href="#"
                 @click.stop.prevent="start_game">Start Game</a>
