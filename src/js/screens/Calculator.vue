@@ -39,6 +39,7 @@
     import Settings from "@/screens/Settings.vue";
     import ScoreCounter from "@/components/ScoreCounter.vue";
     import ScoreInput from "@/components/ScoreInput.vue";
+    import Game from "@/models/Game.ts";
     import Game from "@/models/Game.js";
 
     export default {

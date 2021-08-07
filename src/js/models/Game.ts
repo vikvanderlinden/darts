@@ -1,6 +1,24 @@
-import User from "@/models/User.js";
+import { User } from "./User";
+import { Variant } from "./../game-variants/Variant";
+
+type Score = {
+    multiplier: number,
+    value: number,
+};
 
 export default class Game {
+    score_regex:RegExp;
+    name_regex:RegExp;
+
+    users:Array<User>;
+    current_user:number;
+    winning_user:number;
+
+    game_started: Boolean;
+    round: number;
+    current_play:Array<Score>;
+    variant: Variant;
+
     constructor() {
         this.score_regex = new RegExp("^([0-9]{1,2}|ib|ob)$");
         this.name_regex = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9-_ ]{0,19}$');
@@ -12,13 +30,19 @@ export default class Game {
         this.game_started = false;
         this.round = 1;
         this.current_play = [];
+        this.variant;
+    }
+
+    set_variant(variant: Variant) {
+        this.variant = variant;
     }
 
     can_start_game() {
         return this.users.length > 0;
     }
 
-    start(should_shuffle) {
+    start(should_shuffle: Boolean) {
+        alert("playing " + this.variant.name);
         if (should_shuffle) shuffle_array(this.users);
         this.game_started = true;
     }
@@ -27,16 +51,16 @@ export default class Game {
         this.game_started = false;
     }
 
-    register_score(score) {
-        if (this.score_regex.test(score.value) === -1) {
+    register_score(score: Score) {
+        if (!this.score_regex.test(score.value.toString())) {
             throw Error("Score must be valid value");
         }
 
-        if (score.value === "ib") {
-            score.value = 50;
-        } else if (score.value === "ob") {
-            score.value = 25;
-        }
+        // if (score.value === "ib") {
+        //     score.value = 50;
+        // } else if (score.value === "ob") {
+        //     score.value = 25;
+        // }
 
         this.current_play.push({multiplier: score.multiplier, value: score.value});
         this.update_stats();
@@ -107,8 +131,8 @@ export default class Game {
             return `Throw your darts, ${this.users[this.current_user].name}`;
         }
 
-        let calculations = [];
-        let total_score = 0;
+        let calculations:Array<string> = [];
+        let total_score:number = 0;
 
         this.current_play.forEach((s) => {
             calculations.push((s.multiplier > 1) ? `${s.multiplier}x${s.value}` : `${s.value}`);
@@ -118,7 +142,7 @@ export default class Game {
         return `${calculations.join(" + ")} = ${total_score}`;
     }
 
-    add_user(name) {
+    add_user(name:string) {
         if (this.game_started) {
             throw Error("Cannot add users when game is active");
         }
@@ -135,7 +159,7 @@ export default class Game {
         this.users.push(new User(name));
     }
 
-    remove_user(user) {
+    remove_user(user: User) {
         if (this.game_started) {
             throw Error("Cannot remove users when game is active");
         }
@@ -162,7 +186,7 @@ export default class Game {
 }
 
 // Adapted from: https://stackoverflow.com/a/2450976
-function shuffle_array(array) {
+function shuffle_array(array: Array<any>) {
     let currentIndex = array.length;
     let randomIndex;
 

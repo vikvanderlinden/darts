@@ -15,12 +15,18 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
     },
     resolve: {
+        extensions: ['.tsx', '.ts', '.js'],
         alias: {
             '@': path.resolve('./src/js')
-        }
+        },
     },
     module: {
         rules: [
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
             {
                 test: /\.vue$/,
                 use: ['vue-loader']
