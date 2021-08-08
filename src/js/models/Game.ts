@@ -115,12 +115,6 @@ export default class Game {
             throw Error("Max number of throws done");
         }
 
-        // if (score.value === "ib") {
-        //     score.value = 50;
-        // } else if (score.value === "ob") {
-        //     score.value = 25;
-        // }
-
         this.current_player.add_throw({multiplier: score.multiplier, value: score.value});
 
         if (this.current_player.is_out) {
@@ -129,6 +123,17 @@ export default class Game {
         }
 
         this.update_stats();
+    }
+
+    public register_bull(bull: number): void {
+        if (bull !== 1 && bull !== 2) {
+            throw Error("Bull value should be 1 or 2");
+        }
+
+        this.register_score({
+            multiplier: 1,
+            value: bull * 25
+        });
     }
 
     public register_miss(): void {

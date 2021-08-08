@@ -27,6 +27,7 @@
             <ScoreCounter :game="game"></ScoreCounter>
             <ScoreInput
                 @score="enter_score"
+                @bull="enter_bull"
                 @next="go_next"
                 @miss="enter_miss"
                 @del="bksp"
@@ -84,6 +85,9 @@
             },
             enter_score(score) {
                 this.game.register_score(score);
+            },
+            enter_bull(bull) {
+                this.game.register_bull(bull);
             },
             enter_miss() {
                 this.game.register_miss();

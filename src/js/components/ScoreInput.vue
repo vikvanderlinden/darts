@@ -10,8 +10,8 @@
         </div>
         <div class="flex gap-2 mt-4">
             <a class="score-btn flex-1 red-btn" @click.stop.prevent="emit_del()" href="#">Del</a>
-            <a class="score-btn flex-1" @click.stop.prevent="emit_score('ob')" href="#">Outer</a>
-            <a class="score-btn flex-1" @click.stop.prevent="emit_score('ib')" href="#">Bull</a>
+            <a class="score-btn flex-1" @click.stop.prevent="emit_bull(1)" href="#">Outer</a>
+            <a class="score-btn flex-1" @click.stop.prevent="emit_bull(2)" href="#">Bull</a>
             <a class="score-btn flex-1 green-btn" @click.stop.prevent="emit_next()" href="#">></a>
         </div>
     </div>
@@ -30,7 +30,7 @@ export default {
             score_multiplier: 1,
         }
     },
-    emits: ["score", "next", "miss", "del"],
+    emits: ["score", "bull", "next", "miss", "del"],
     methods: {
         toggle_score_multiplier(n) {
             if (this.score_multiplier === n) {
@@ -45,6 +45,10 @@ export default {
                 multiplier: this.score_multiplier,
                 value
             });
+            this.reset_score_multiplier();
+        },
+        emit_bull(bull) {
+            this.$emit("bull", bull);
             this.reset_score_multiplier();
         },
         emit_next() {

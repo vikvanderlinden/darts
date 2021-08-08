@@ -44,8 +44,8 @@ export default {
     emits: ["close", "shuffle", "autocommit"],
     data() {
         return {
-            auto_commit_plays: false,
-            should_shuffle_users: true,
+            auto_commit_plays: true,
+            should_shuffle_users: false,
             user_name_input: ""
         };
     },
