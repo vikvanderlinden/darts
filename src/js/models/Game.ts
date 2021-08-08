@@ -27,6 +27,8 @@ export default class Game {
     private _round: number = 1;
     private _variant: Variant = null;
 
+    private _auto_commit: boolean = false;
+
     private get state_init(): boolean {
         return this._game_state == GameState.INIT;
     }
@@ -76,6 +78,10 @@ export default class Game {
 
         this.users.forEach(user => user.set_variant(this._variant));
         this._update_init_state();
+    }
+
+    public set_auto_commit(auto_commit: boolean) {
+        this._auto_commit = auto_commit;
     }
 
     public get current_player(): User {
@@ -146,16 +152,14 @@ export default class Game {
     }
 
     private update_stats(): void {
-        // if (this.current_play.length == 3) {
-            // this.current_player.commit_play(this.round);
+        if (this._auto_commit && this.current_player.current_play_length === 3) {
+            this.current_player.commit_play(this._round);
 
-            // if (++this.current_user >= this.users.length) {
-            //     this.current_user = 0;
-            //     this.round++;
-            // }
-
-            // this.current_play = [];
-        // }
+            if (++this.current_user >= this.users.length) {
+                this.current_user = 0;
+                this._round++;
+            }
+        }
 
         this._calculate_prelim_winner();
     }
