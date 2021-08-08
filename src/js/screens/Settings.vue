@@ -5,7 +5,7 @@
             <a href="#" @click.stop.prevent="$emit('close')" class="bg-gray-700 hover:bg-gray-800 px-3 py-2 rounded">Close settings</a>
         </div>
 
-        <select class="px-4 py-3 bg-gray-700 rounded">
+        <select class="px-4 py-3 bg-gray-700 rounded" :disabled="game.game_started">
             <option value="01-games" selected>'01 Games</option>
             <option value="round-the-board" disabled>Round the Board</option>
             <option value="cricket" disabled>Cricket</option>
@@ -21,13 +21,14 @@
         </div>
 
         <label for="should-shuffle" class="block mt-4"><input v-model="should_shuffle_users" type="checkbox" id="should-shuffle"> Shuffle Users On Game Start</label>
+        <label for="auto-commit" class="block mt-2"><input v-model="auto_commit_plays" type="checkbox" id="auto-commit"> Automatically end plays when throws are entered (Unimplemented)</label>
         <div v-if="game.game_started" class="mt-4 text-red-400 text-xl underline">You cannot change the users when a game is active!</div>
         <form method="POST" action="#" @submit.stop.prevent="add_user" class="mt-4" v-if="!game.game_started">
             <input v-model="user_name_input" placeholder="User name" class="bg-gray-700 px-4 py-3 rounded text-white">
             <input @click.stop.prevent="add_user" type="submit" class="bg-green-600 hover:bg-green-700 ml-1 px-4 py-3 rounded cursor-pointer">
         </form>
         <div class="mt-4">
-            <div v-for="(user,i) in game.users" class="flex items-center justify-between px-4 py-4 bg-gray-800 first:rounded-t last:rounded-b" :class="{'bg-gray-900': i%2!=0}">
+            <div v-for="(user,i) in game.users" :key="user.name" class="flex items-center justify-between px-4 py-4 bg-gray-800 first:rounded-t last:rounded-b" :class="{'bg-gray-900': i%2!=0}">
                 <div class="py-3">{{user.name}}</div>
                 <a href="#" @click.stop.prevent="game.remove_user(user)" class="bg-red-600 hover:bg-red-700 px-4 py-3 rounded" v-if="!game.game_started">remove user</a>
             </div>
@@ -41,6 +42,7 @@ export default {
     props: ["game", "open"],
     data() {
         return {
+            auto_commit_plays: false,
             should_shuffle_users: true,
             user_name_input: ""
         };

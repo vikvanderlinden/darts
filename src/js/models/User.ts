@@ -41,6 +41,7 @@ export class User {
 
     public reset(): void {
         this._score = 501;
+        this._current_play = [];
         this._history = {};
     }
 

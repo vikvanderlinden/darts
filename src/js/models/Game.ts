@@ -6,6 +6,14 @@ type Score = {
     value: number,
 };
 
+enum GameState {
+    INIT,   // Not ready to start
+    READY,  // Ready to start
+    STARTED,// Game running
+    PAUSED, // Game stopped temporarily
+    FINISHED// Game done, somebody won
+};
+
 export default class Game {
     private static SCORE_REGEX: RegExp = new RegExp("^([0-9]{1,2}|ib|ob)$");
 
@@ -15,10 +23,45 @@ export default class Game {
     public current_user: number = 0;
     public winning_user: number = 0;
 
-    public game_started: boolean = false;
-    public game_finished: boolean = false;
+    private _game_state: GameState = GameState.INIT;
     private _round: number = 1;
     private _variant: Variant = null;
+
+    private get state_init(): boolean {
+        return this._game_state == GameState.INIT;
+    }
+
+    private get state_ready(): boolean {
+        return this._game_state == GameState.READY;
+    }
+
+    private get state_started(): boolean {
+        return this._game_state == GameState.STARTED;
+    }
+
+    private get state_paused(): boolean {
+        return this._game_state == GameState.PAUSED;
+    }
+
+    private get state_finished(): boolean {
+        return this._game_state == GameState.FINISHED;
+    }
+
+    public get can_change_settings(): boolean {
+        return this.state_init || this.state_ready;
+    }
+
+    public get can_start(): boolean {
+        return this.state_ready || this.state_paused;
+    }
+
+    public get can_reset(): boolean {
+        return this.state_started || this.state_paused || this.state_finished;
+    }
+
+    public get show_score(): boolean {
+        return this.state_ready || this.state_started || this.state_paused || this.state_finished;
+    }
 
     public get round(): number {
         return this._round;
@@ -32,15 +75,16 @@ export default class Game {
         this._variant = Game.VARIANTS[variant_id];
 
         this.users.forEach(user => user.set_variant(this._variant));
+        this._update_init_state();
     }
 
     public get current_player(): User {
         return this.users[this.current_user];
     }
 
-    public get can_start(): boolean {
-        return (this.users.length > 0) && (this._variant !== null);
-    }
+    // public get can_start(): boolean {
+    //     return (this.users.length > 0) && (this._variant !== null);
+    // }
 
     public start(should_shuffle: boolean): void {
         if (this._variant === null) {
@@ -49,12 +93,11 @@ export default class Game {
 
         console.log("playing " + this._variant.human_name);
         if (should_shuffle) shuffle_array(this.users);
-        this.game_started = true;
+        this._game_state = GameState.STARTED;
     }
 
-    public end(): void {
-        this.game_started = false;
-        this.game_finished = false;
+    public pause(): void {
+        this._game_state = GameState.PAUSED;
     }
 
     public register_score(score: Score): void {
@@ -73,7 +116,7 @@ export default class Game {
 
         if (this.current_player.updated_score == 0) {
             this.current_player.commit_play(this.round);
-            this.game_finished = true;
+            this._game_state = GameState.FINISHED;
         }
     }
 
@@ -131,7 +174,7 @@ export default class Game {
     }
 
     public current_play_calculation(): string {
-        if (!this.game_started) {
+        if (!this.state_started) {
             return "Start the game";
         }
 
@@ -139,7 +182,7 @@ export default class Game {
             return "Select a game variant";
         }
 
-        if (this.game_finished) {
+        if (this.state_finished) {
             return `Congrats, ${this.users[this.winning_user].name} won!`;
         }
 
@@ -147,10 +190,13 @@ export default class Game {
     }
 
     public reset(): void {
+        if (!this.can_reset) {
+            throw Error("Cannot reset at this moment");
+        }
+
         this.current_user = 0;
 
-        this.game_started = false;
-        this.game_finished = false;
+        this._game_state = GameState.READY;
         this._round = 1;
 
         this.users.forEach(user => user.reset());
@@ -159,7 +205,7 @@ export default class Game {
     }
 
     public add_user(name: string): void {
-        if (this.game_started) {
+        if (!this.can_change_settings) {
             throw Error("Cannot add users when game is active");
         }
 
@@ -169,10 +215,11 @@ export default class Game {
         }
 
         this.users.push(new User(name));
+        this._update_init_state();
     }
 
     public remove_user(user: User): void {
-        if (this.game_started) {
+        if (!this.can_change_settings) {
             throw Error("Cannot remove users when game is active");
         }
 
@@ -182,6 +229,15 @@ export default class Game {
         }
 
         this.users.splice(user_index, 1);
+        this._update_init_state();
+    }
+
+    private _update_init_state(): void {
+        if (this.users.length > 0 && this._variant !== null) {
+            this._game_state = GameState.READY;
+        } else {
+            this._game_state = GameState.INIT;
+        }
     }
 }
 

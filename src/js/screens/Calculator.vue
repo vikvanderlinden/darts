@@ -7,21 +7,21 @@
                 href="#"
                 @click.stop.prevent="settings_modal_open=true">Settings</a>
             <a
-                :class="{'bg-red-700 hover:bg-red-800': game.can_start, 'bg-gray-800 pointer-events-none cursor-default': !game.can_start}"
+                :class="{'bg-red-700 hover:bg-red-800': game.can_reset, 'bg-gray-800 pointer-events-none cursor-default': !game.can_reset}"
                 class="ml-2 px-3 py-2 rounded"
                 href="#"
                 @click.stop.prevent="game.reset()">Reset Game</a>
             <a
-                v-if="!game.game_started"
+                v-if="!game.state_started"
                 :class="{'bg-green-700 hover:bg-green-800': game.can_start, 'bg-gray-800 pointer-events-none cursor-default': !game.can_start}"
                 class="ml-2 px-3 py-2 rounded"
                 href="#"
                 @click.stop.prevent="start_game">Start Game</a>
             <a
-                v-else
+                v-if="game.state_started"
                 class="ml-2 bg-red-700 hover:bg-red-800 px-3 py-2 rounded"
                 href="#"
-                @click.stop.prevent="end_game">End Game</a>
+                @click.stop.prevent="pause_game">Pause Game</a>
         </div>
         <div class="md:flex items-center">
             <ScoreCounter :game="game"></ScoreCounter>
@@ -30,7 +30,7 @@
                 @next="go_next"
                 @miss="enter_miss"
                 @del="bksp"
-                :class="{'pointer-events-none opacity-50': !game.game_started}"></ScoreInput>
+                :class="{'pointer-events-none opacity-50': !game.state_started}"></ScoreInput>
         </div>
     </div>
 </template>
@@ -68,8 +68,8 @@
                     this.game.start(this.should_shuffle_users);
                 }
             },
-            end_game() {
-                this.game.end();
+            pause_game() {
+                this.game.pause();
             },
             enter_score(score) {
                 this.game.register_score(score);
