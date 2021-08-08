@@ -15,13 +15,13 @@ export default class Game {
     public current_user: number = 0;
     public winning_user: number = 0;
 
-    public game_started: Boolean = false;
-    public round: number = 1;
-    public current_play: Array<Score> = [];
-    public variant: Variant = null;
+    public game_started: boolean = false;
+    public game_finished: boolean = false;
+    private _round: number = 1;
+    private _variant: Variant = null;
 
-    public get current_player(): User {
-        return this.users[this.current_user];
+    public get round(): number {
+        return this._round;
     }
 
     public static register_variant(variant: Variant): void {
@@ -29,24 +29,35 @@ export default class Game {
     }
 
     public set_variant(variant_id: string) {
-        this.variant = Game.VARIANTS[variant_id];
+        this._variant = Game.VARIANTS[variant_id];
+
+        this.users.forEach(user => user.set_variant(this._variant));
+    }
+
+    public get current_player(): User {
+        return this.users[this.current_user];
     }
 
     public get can_start(): boolean {
-        return this.users.length > 0;
+        return (this.users.length > 0) && (this._variant !== null);
     }
 
-    start(should_shuffle: boolean): void {
-        console.log("playing " + this.variant.human_name);
+    public start(should_shuffle: boolean): void {
+        if (this._variant === null) {
+            throw Error("A game variant should be selected before starting the game");
+        }
+
+        console.log("playing " + this._variant.human_name);
         if (should_shuffle) shuffle_array(this.users);
         this.game_started = true;
     }
 
-    end(): void {
+    public end(): void {
         this.game_started = false;
+        this.game_finished = false;
     }
 
-    register_score(score: Score): void {
+    public register_score(score: Score): void {
         if (!Game.SCORE_REGEX.test(score.value.toString())) {
             throw Error("Score must be valid value");
         }
@@ -57,36 +68,38 @@ export default class Game {
         //     score.value = 25;
         // }
 
-        this.current_play.push({multiplier: score.multiplier, value: score.value});
+        this.current_player.add_throw({multiplier: score.multiplier, value: score.value});
         this.update_stats();
+
+        if (this.current_player.updated_score == 0) {
+            this.current_player.commit_play(this.round);
+            this.game_finished = true;
+        }
     }
 
-    register_miss(): void {
+    public register_miss(): void {
         this.register_score({multiplier: 0,value:0});
     }
 
-    delete_previous(): void {
-        this.current_play.pop();
+    public delete_previous(): void {
+        this.current_player.delete_throw();
         this.update_stats();
     }
 
-    next_user(): void {
-        // If current play empty, indicated skipped turn
-
-        this.current_player.register_score(this.round, this.current_play);
+    public next_user(): void {
+        this.current_player.commit_play(this._round);
 
         if (++this.current_user >= this.users.length) {
             this.current_user = 0;
-            this.round++;
+            this._round++;
         }
 
-        this.current_play = [];
         this.update_stats();
     }
 
-    update_stats(): void {
-        if (this.current_play.length == 3) {
-            // this.users[this.current_user].register_score(this.round, this.current_play);
+    private update_stats(): void {
+        // if (this.current_play.length == 3) {
+            // this.current_player.commit_play(this.round);
 
             // if (++this.current_user >= this.users.length) {
             //     this.current_user = 0;
@@ -94,12 +107,12 @@ export default class Game {
             // }
 
             // this.current_play = [];
-        }
+        // }
 
         this.calculate_prelim_winner();
     }
 
-    calculate_prelim_winner(): void {
+    private calculate_prelim_winner(): void {
         let lowest_score = Infinity;
         let lowest_index = 0;
 
@@ -113,41 +126,39 @@ export default class Game {
         this.winning_user = lowest_index;
     }
 
-    current_play_score(): number {
-        return this.current_play.reduce((p, c) => p + c.multiplier * c.value, 0);
+    public current_play_score(): number {
+        return this.current_player.current_play_score();
     }
 
-    current_play_calculation(): string {
+    public current_play_calculation(): string {
         if (!this.game_started) {
             return "Start the game";
         }
 
-        if (this.current_play.length == 0) {
-            return `Throw your darts, ${this.current_player.name}`;
+        if (this._variant === null) {
+            return "Select a game variant";
         }
 
-        let mapper = (s: Score) => ((s.multiplier > 1) ? `${s.multiplier}x` : '') + s.value.toString();
-        let calculation: string =
-            this.current_play
-                .map(mapper)
-                .join(" + ");
+        if (this.game_finished) {
+            return `Congrats, ${this.users[this.winning_user].name} won!`;
+        }
 
-        return `${calculation} = ${this.current_play_score()}`;
+        return this.current_player.current_play_calculation();
     }
 
-    reset(): void {
+    public reset(): void {
         this.current_user = 0;
 
         this.game_started = false;
-        this.round = 1;
-        this.current_play = [];
+        this.game_finished = false;
+        this._round = 1;
 
         this.users.forEach(user => user.reset());
 
         this.calculate_prelim_winner();
     }
 
-    add_user(name: string): void {
+    public add_user(name: string): void {
         if (this.game_started) {
             throw Error("Cannot add users when game is active");
         }
@@ -160,7 +171,7 @@ export default class Game {
         this.users.push(new User(name));
     }
 
-    remove_user(user: User): void {
+    public remove_user(user: User): void {
         if (this.game_started) {
             throw Error("Cannot remove users when game is active");
         }
