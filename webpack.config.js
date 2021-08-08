@@ -8,11 +8,13 @@ module.exports = {
         new VueLoaderPlugin()
     ],
     mode: process.env.NODE_ENV,
-    watch: true,
+    watch: process.env.NODE_ENV === "development",
     entry: './src/js/index.js',
     output: {
         filename: 'main.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: (process.env.NODE_ENV === "production") ?
+            path.resolve(__dirname, 'docs') :
+            path.resolve(__dirname, 'dist'),
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
