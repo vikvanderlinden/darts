@@ -82,17 +82,17 @@ export default class Game {
         return this.users[this.current_user];
     }
 
-    // public get can_start(): boolean {
-    //     return (this.users.length > 0) && (this._variant !== null);
-    // }
-
     public start(should_shuffle: boolean): void {
         if (this._variant === null) {
             throw Error("A game variant should be selected before starting the game");
         }
 
         console.log("playing " + this._variant.human_name);
-        if (should_shuffle) shuffle_array(this.users);
+
+        if (should_shuffle && !this.state_paused) {
+            shuffle_array(this.users);
+        }
+
         this._game_state = GameState.STARTED;
     }
 
@@ -105,6 +105,10 @@ export default class Game {
             throw Error("Score must be valid value");
         }
 
+        if (this.current_player.current_play_length === 3) {
+            throw Error("Max number of throws done");
+        }
+
         // if (score.value === "ib") {
         //     score.value = 50;
         // } else if (score.value === "ob") {
@@ -112,12 +116,13 @@ export default class Game {
         // }
 
         this.current_player.add_throw({multiplier: score.multiplier, value: score.value});
-        this.update_stats();
 
-        if (this.current_player.updated_score == 0) {
+        if (this.current_player.is_out) {
             this.current_player.commit_play(this.round);
             this._game_state = GameState.FINISHED;
         }
+
+        this.update_stats();
     }
 
     public register_miss(): void {
@@ -152,10 +157,10 @@ export default class Game {
             // this.current_play = [];
         // }
 
-        this.calculate_prelim_winner();
+        this._calculate_prelim_winner();
     }
 
-    private calculate_prelim_winner(): void {
+    private _calculate_prelim_winner(): void {
         let lowest_score = Infinity;
         let lowest_index = 0;
 
@@ -174,8 +179,8 @@ export default class Game {
     }
 
     public current_play_calculation(): string {
-        if (!this.state_started) {
-            return "Start the game";
+        if (this.users.length === 0) {
+            return "Add users to start a game";
         }
 
         if (this._variant === null) {
@@ -184,6 +189,10 @@ export default class Game {
 
         if (this.state_finished) {
             return `Congrats, ${this.users[this.winning_user].name} won!`;
+        }
+
+        if (!this.state_started) {
+            return "Start the game";
         }
 
         return this.current_player.current_play_calculation();
@@ -195,13 +204,12 @@ export default class Game {
         }
 
         this.current_user = 0;
-
         this._game_state = GameState.READY;
         this._round = 1;
 
         this.users.forEach(user => user.reset());
 
-        this.calculate_prelim_winner();
+        this._calculate_prelim_winner();
     }
 
     public add_user(name: string): void {
@@ -233,6 +241,10 @@ export default class Game {
     }
 
     private _update_init_state(): void {
+        if (!this.can_change_settings) {
+            throw Error("Cannot change state");
+        }
+
         if (this.users.length > 0 && this._variant !== null) {
             this._game_state = GameState.READY;
         } else {

@@ -27,12 +27,16 @@ export class User {
         this._variant = variant;
     }
 
-    public get name() {
+    public get name(): string {
         return this._name;
     }
 
-    public get score() {
+    public get score(): number {
         return this._score;
+    }
+
+    public get current_play_length(): number {
+        return this._current_play.length;
     }
 
     public get updated_score(): number {
@@ -45,16 +49,27 @@ export class User {
         this._history = {};
     }
 
+    public get is_out(): boolean {
+        return this._score === 0 ||
+                (this.current_play_score() === this._score &&
+                this._is_valid_endplay());
+    }
+
     public commit_play(round: number): void {
         let score: number = this.current_play_score();
 
         this._history[round] = this._current_play;
 
-        if (score <= this._score) {
+        if ((this._score - score > 1) ||
+            (score === this._score && this._is_valid_endplay())) {
             this._score -= score;
         }
 
         this._current_play = [];
+    }
+
+    private _is_valid_endplay(): boolean {
+        return this._current_play.filter(s => s.multiplier === 2).length > 0;
     }
 
     public add_throw(new_throw: Score): void {
