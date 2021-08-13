@@ -8,3 +8,9 @@ if (process.env.NODE_ENV === 'development') {
 
 const app = createApp(Calculator);
 app.mount("#app");
+
+window.addEventListener("load", () => {
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker.js");
+    }
+});
