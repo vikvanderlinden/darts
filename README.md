@@ -1,7 +1,7 @@
 
 [![MIT License](https://badgen.net/badge/license/MIT/blue)](https://github.com/vikvanderlinden/darts/blob/main/LICENSE)
-[![Version](https://badgen.net/github/release/vikvanderlinden/darts)](https://github.com/vikvanderlinden/darts/)
-[![Open Issues](https://badgen.net/github/open-issues/vikvanderlinden/darts)](https://github.com/vikvanderlinden/darts/issues)
+[![Version](https://badgen.net/github/release/vikvanderlinden/darts?label=version&cache=300)](https://github.com/vikvanderlinden/darts/)
+[![Open Issues](https://badgen.net/github/open-issues/vikvanderlinden/darts?label=bugs,%20issues,%20suggestions?&cache=300)](https://github.com/vikvanderlinden/darts/issues)
 
 # Darts
 
