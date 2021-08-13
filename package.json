@@ -1,7 +1,7 @@
 {
-  "name": "darts-score-counter",
+  "name": "darts",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple darts score counter",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
     "deploy": "NODE_ENV=production webpack"
   },
   "author": "Vik Vanderlinden",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^4.0.3",

@@ -1,13 +1,13 @@
 # Run inside devcontainer
-ls /workspaces/darts-score-counter;
+ls /workspaces/darts;
 cat >/etc/nginx/sites-enabled/current <<EOF
 server {
        listen 8888;
        listen [::]:8888;
 
-       server_name darts-score-counter;
+       server_name darts;
 
-       root /workspaces/darts-score-counter/dist;
+       root /workspaces/darts/dist;
        index index.html;
 
        location / {
