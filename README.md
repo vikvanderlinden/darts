@@ -1,4 +1,9 @@
-# Darts Score Counter
+
+[![MIT License](https://badgen.net/badge/license/MIT/blue)](https://github.com/vikvanderlinden/darts/blob/main/LICENSE)
+[![Version](https://badgen.net/github/release/vikvanderlinden/darts)](https://github.com/vikvanderlinden/darts/)
+[![Open Issues](https://badgen.net/github/open-issues/vikvanderlinden/darts)](https://github.com/vikvanderlinden/darts/issues)
+
+# Darts
 
 This is a very simple score counter for some games of darts.
 

@@ -1,5 +1,20 @@
 <template>
     <div class="bg-black fixed h-full p-10 w-full z-10 block max-h-full overflow-auto" :class="{'hidden': !open}">
+        <div class="flex mb-4">
+            <a href="https://github.com/vikvanderlinden/darts/blob/main/LICENSE" target="_blank">
+                <img src="https://badgen.net/badge/license/MIT/blue" alt="MIT License">
+            </a>
+            <a class="ml-1" href="https://github.com/vikvanderlinden/darts/" target="_blank">
+                <img src="https://badgen.net/github/release/vikvanderlinden/darts?label=version" alt="Version">
+            </a>
+            <a class="ml-1" href="https://github.com/vikvanderlinden/darts/issues" target="_blank">
+                <img src="https://badgen.net/github/open-issues/vikvanderlinden/darts?label=bugs,%20issues,%20suggestions?" alt="Open Issues">
+            </a>
+            <a class="ml-1" href="https://github.com/vikvanderlinden" target="_blank">
+                <img src="https://badgen.net/badge/by%20Vik,%20made%20with/%E2%9D%A4/red" alt="Made with Love">
+            </a>
+        </div>
+
         <div class="flex items-center justify-between">
             <div class="text-3xl mb-4">Settings</div>
             <a href="#" @click.stop.prevent="$emit('close')" class="bg-gray-700 hover:bg-gray-800 px-3 py-2 rounded">Close settings</a>
