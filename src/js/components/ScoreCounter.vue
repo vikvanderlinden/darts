@@ -21,8 +21,8 @@
                 <div class="mt-3 text-center text-base text-blue-400">Round {{game.round}}</div>
             </div>
         </div>
-        <div class="mt-4 text-3xl text-center" v-if="game.show_score">{{game.current_play_calculation()}}</div>
-        <div v-else class="text-3xl text-center">{{game.current_play_calculation()}}</div>
+        <div class="mt-4 text-3xl text-center" v-if="game.show_score">{{game.current_turn_calculation()}}</div>
+        <div v-else class="text-3xl text-center">{{game.current_turn_calculation()}}</div>
     </div>
 </template>
 

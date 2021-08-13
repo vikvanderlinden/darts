@@ -27,7 +27,7 @@ export default class Game {
     private _round: number = 1;
     private _variant: Variant = null;
 
-    private _auto_commit: boolean = false;
+    private _auto_commit: boolean = true;
 
     private get state_init(): boolean {
         return this._game_state == GameState.INIT;
@@ -111,14 +111,14 @@ export default class Game {
             throw Error("Score must be valid value");
         }
 
-        if (this.current_player.current_play_length === 3) {
+        if (this.current_player.current_turn_length === 3) {
             throw Error("Max number of throws done");
         }
 
         this.current_player.add_throw({multiplier: score.multiplier, value: score.value});
 
         if (this.current_player.is_out) {
-            this.current_player.commit_play(this.round);
+            this.current_player.commit_turn(this.round);
             this._game_state = GameState.FINISHED;
         }
 
@@ -146,7 +146,7 @@ export default class Game {
     }
 
     public next_user(): void {
-        this.current_player.commit_play(this._round);
+        this.current_player.commit_turn(this._round);
 
         if (++this.current_user >= this.users.length) {
             this.current_user = 0;
@@ -157,8 +157,8 @@ export default class Game {
     }
 
     private update_stats(): void {
-        if (this._auto_commit && this.current_player.current_play_length === 3) {
-            this.current_player.commit_play(this._round);
+        if (this._auto_commit && this.current_player.current_turn_length === 3) {
+            this.current_player.commit_turn(this._round);
 
             if (++this.current_user >= this.users.length) {
                 this.current_user = 0;
@@ -183,11 +183,7 @@ export default class Game {
         this.winning_user = lowest_index;
     }
 
-    public current_play_score(): number {
-        return this.current_player.current_play_score();
-    }
-
-    public current_play_calculation(): string {
+    public current_turn_calculation(): string {
         if (this.users.length === 0) {
             return "Add users to start a game";
         }
@@ -204,7 +200,7 @@ export default class Game {
             return "Start the game";
         }
 
-        return this.current_player.current_play_calculation();
+        return this.current_player.current_turn_calculation();
     }
 
     public reset(): void {

@@ -22,7 +22,7 @@
         </div>
 
         <label for="should-shuffle" class="block mt-4"><input v-model="should_shuffle_users" @change="$emit('shuffle', should_shuffle_users)" type="checkbox" id="should-shuffle"> Shuffle Users On Game Start</label>
-        <label for="auto-commit" class="block mt-2"><input v-model="auto_commit_plays" @change="$emit('autocommit', auto_commit_plays)" type="checkbox" id="auto-commit"> Automatically end plays when throws are entered</label>
+        <label for="auto-commit" class="block mt-2"><input v-model="auto_commit_turns" @change="$emit('autocommit', auto_commit_turns)" type="checkbox" id="auto-commit"> Automatically end turns when throws are entered</label>
         <div v-if="!game.can_change_settings" class="mt-4 text-red-400 text-xl underline">You cannot change the users when a game is active!</div>
         <form method="POST" action="#" @submit.stop.prevent="add_user" class="mt-4" v-if="game.can_change_settings">
             <input v-model="user_name_input" placeholder="User name" class="bg-gray-700 px-4 py-3 rounded text-white">
@@ -44,7 +44,7 @@ export default {
     emits: ["close", "shuffle", "autocommit"],
     data() {
         return {
-            auto_commit_plays: true,
+            auto_commit_turns: true,
             should_shuffle_users: false,
             user_name_input: ""
         };
