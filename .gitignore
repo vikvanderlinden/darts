@@ -1,3 +1,6 @@
 node_modules/
 dist/*
 !dist/index.html
+docs/*
+!docs/index.html
+!docs/service-worker.js
