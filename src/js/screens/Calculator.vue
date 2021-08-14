@@ -1,5 +1,5 @@
 <template>
-    <div class="max-h-screen overflow-auto" :class="{'overflow-hidden': settings_modal_open}">
+    <div class="max-h-screen md:h-screen md:flex md:flex-col overflow-auto" :class="{'overflow-hidden': settings_modal_open}">
         <Settings :game="game" @close="settings_modal_open=false" @autocommit="update_autocommit" @shuffle="update_shuffle" :open="settings_modal_open"></Settings>
         <div class="max-w-sm mx-auto p-4 text-center">
             <a
@@ -23,7 +23,7 @@
                 href="#"
                 @click.stop.prevent="pause_game">Pause Game</a>
         </div>
-        <div class="md:flex items-center">
+        <div class="md:flex items-center md:flex-1">
             <ScoreCounter :game="game"></ScoreCounter>
             <ScoreInput
                 @score="enter_score"
