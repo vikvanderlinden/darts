@@ -27,7 +27,8 @@ export default class Game {
     private _round: number = 1;
     private _variant: Variant = null;
 
-    private _auto_commit: boolean = true;
+    private _auto_commit_turns: boolean = true;
+    private _should_shuffle_users: boolean = false;
 
     private get state_init(): boolean {
         return this._game_state == GameState.INIT;
@@ -84,8 +85,24 @@ export default class Game {
         this._update_init_state();
     }
 
-    public set_auto_commit(auto_commit: boolean) {
-        this._auto_commit = auto_commit;
+    public get variants() {
+        return Object.values(Game._VARIANTS);
+    }
+
+    public get should_shuffle_users(): boolean {
+        return this._should_shuffle_users;
+    }
+
+    public set should_shuffle_users(new_value: boolean) {
+        this._should_shuffle_users = new_value;
+    }
+
+    public get auto_commit_turns(): boolean {
+        return this._auto_commit_turns;
+    }
+
+    public set auto_commit_turns(new_value: boolean) {
+        this._auto_commit_turns = new_value;
     }
 
     public get current_user(): number {
@@ -100,7 +117,7 @@ export default class Game {
         return this.users[this._current_user];
     }
 
-    public start(should_shuffle: boolean): void {
+    public start(): void {
         if (!this.can_start) {
             throw Error("Cannot start the game at this moment");
         }
@@ -113,7 +130,7 @@ export default class Game {
             throw Error("Users should be added to start a game");
         }
 
-        if (should_shuffle && !this.state_paused) {
+        if (this.should_shuffle_users && !this.state_paused) {
             shuffle_array(this.users);
         }
 
@@ -209,7 +226,7 @@ export default class Game {
             throw Error("Game should be started to update the game statistics");
         }
 
-        if (this._auto_commit && this.current_player.current_turn_length === 3) {
+        if (this._auto_commit_turns && this.current_player.current_turn_length === 3) {
             this.current_player.commit_turn(this._round);
 
             if (++this._current_user >= this.users.length) {
@@ -279,7 +296,11 @@ export default class Game {
             throw Error("This name already exists, please use another one");
         }
 
-        this.users.push(new User(name));
+        if (this._variant === null) {
+            throw Error("Select a game variant before adding users");
+        }
+
+        this.users.push(new User(name, this._variant));
         this._update_init_state();
     }
 
