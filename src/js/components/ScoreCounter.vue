@@ -29,7 +29,7 @@
 <script>
 export default {
     name: "score-counter-component",
-    props: ["game"],
+    inject: ["game"],
 }
 </script>
 

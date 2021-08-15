@@ -24,7 +24,7 @@
                 @click.stop.prevent="pause_game">Pause Game</a>
         </div>
         <div class="md:flex items-center md:flex-1">
-            <ScoreCounter :game="game"></ScoreCounter>
+            <ScoreCounter></ScoreCounter>
             <ScoreInput
                 @score="enter_score"
                 @bull="enter_bull"
@@ -40,21 +40,12 @@
     import Settings from "@/screens/Settings.vue";
     import ScoreCounter from "@/components/ScoreCounter.vue";
     import ScoreInput from "@/components/ScoreInput.vue";
-    import Game from "@/models/Game.ts";
-    import OhOneGames from "@/game-variants/OhOneGames.ts";
 
     export default {
-        name: "calculator-screen",
+        name: "darts-screen",
+        inject: ["game"],
         data() {
-            let game = new Game();
-            let variants = [
-                new OhOneGames(),
-            ];
-
-            game.set_variant("01-games");
-
             return {
-                game,
                 settings_modal_open: false,
                 settings: {
                     should_shuffle: true,
