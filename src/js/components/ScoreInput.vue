@@ -47,8 +47,8 @@ export default {
             });
             this.reset_score_multiplier();
         },
-        emit_bull(bull) {
-            this.$emit("bull", bull);
+        emit_bull(multiplier) {
+            this.$emit("bull", multiplier);
             this.reset_score_multiplier();
         },
         emit_next() {
@@ -56,7 +56,7 @@ export default {
             this.reset_score_multiplier();
         },
         emit_miss() {
-            this.$emit("miss");
+            this.$emit("miss", this.score_multiplier);
             this.reset_score_multiplier();
         },
         emit_del() {

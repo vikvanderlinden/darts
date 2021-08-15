@@ -86,11 +86,11 @@
             enter_score(score) {
                 this.game.register_score(score);
             },
-            enter_bull(bull) {
-                this.game.register_bull(bull);
+            enter_bull(multiplier) {
+                this.game.register_bull(multiplier);
             },
-            enter_miss() {
-                this.game.register_miss();
+            enter_miss(multiplier) {
+                this.game.register_miss(multiplier);
             },
             go_next() {
                 this.game.next_user();

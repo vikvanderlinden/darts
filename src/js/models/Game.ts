@@ -162,8 +162,22 @@ export default class Game {
         });
     }
 
-    public register_miss(): void {
-        this.register_score({multiplier: 0,value:0});
+    public register_miss(multiplier: number): void {
+        if (!this.state_started) {
+            throw Error("Game should be started to register a miss");
+        }
+
+        if (multiplier < 1 || multiplier > 3) {
+            throw Error("The miss multiplier should be between 1 and 3");
+        }
+
+        if (multiplier + this.current_player.current_turn_length > 3) {
+            throw Error("Cannot enter more than 3 throws in total");
+        }
+
+        for (let i = 0; i < multiplier; i++) {
+            this.register_score({multiplier:0,value:0});
+        }
     }
 
     public delete_previous(): void {
