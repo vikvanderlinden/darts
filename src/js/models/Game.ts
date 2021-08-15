@@ -173,10 +173,7 @@ export default class Game {
             throw Error("Bull multiplier should be 1 or 2");
         }
 
-        this.register_score({
-            multiplier: 1,
-            value: multiplier * 25
-        });
+        this._variant.register_bull(this, multiplier);
     }
 
     public register_miss(multiplier: number): void {
@@ -188,7 +185,7 @@ export default class Game {
             throw Error("The miss multiplier should be between 1 and 3");
         }
 
-        if (multiplier + this.current_player.current_turn_length > 3) {
+        if (multiplier + this.current_player.current_turn_length > this._variant.turn_length) {
             throw Error("Cannot enter more than 3 throws in total");
         }
 
@@ -226,7 +223,9 @@ export default class Game {
             throw Error("Game should be started to update the game statistics");
         }
 
-        if (this._auto_commit_turns && this.current_player.current_turn_length === 3) {
+        if (this._auto_commit_turns &&
+            this.current_player.current_turn_length === this._variant.turn_length) {
+
             this.current_player.commit_turn(this._round);
 
             if (++this._current_user >= this.users.length) {

@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'development') {
 // Create game instance and register variants
 let game = reactive(new Game());
 let variants = [
-    new OhOneGames(),
+    new OhOneGames(501),
 ];
 game.set_variant("01-games");
 

@@ -14,17 +14,20 @@ export class User {
     private _history: Record<number,Array<Score>> = {};
     private _variant: Variant = null;
 
-    public constructor(name: string) {
+    public constructor(name: string, variant: Variant) {
         if (!User.NAME_REGEX.test(name)) {
             throw Error("The name must be alphanumeric with - or _ and max 20 characters");
         }
 
         this._name = name;
-        this._score = 501;
+        this._variant = variant;
+        this._score = this._variant.init_score;
     }
 
     public set_variant(variant: Variant): void {
         this._variant = variant;
+
+        this.reset();
     }
 
     public get name(): string {
@@ -33,6 +36,10 @@ export class User {
 
     public get score(): number {
         return this._score;
+    }
+
+    public get current_turn(): Array<Score> {
+        return this._current_turn;
     }
 
     public get current_turn_length(): number {
@@ -44,15 +51,13 @@ export class User {
     }
 
     public reset(): void {
-        this._score = 501;
+        this._score = this._variant.init_score;
         this._current_turn = [];
         this._history = {};
     }
 
     public get is_out(): boolean {
-        return this._score === 0 ||
-                (this.current_turn_score() === this._score &&
-                this._is_valid_end_turn());
+        return this._variant.is_out(this);
     }
 
     public commit_turn(round: number): void {
@@ -60,8 +65,7 @@ export class User {
 
         this._history[round] = this._current_turn;
 
-        if ((this._score - score > 1) ||
-            (score === this._score && this._is_valid_end_turn())) {
+        if (!this._variant.current_turn_is_bust(this)) {
             this._score -= score;
         }
 
@@ -69,11 +73,11 @@ export class User {
     }
 
     private _is_valid_end_turn(): boolean {
-        return this._current_turn.filter(s => s.multiplier === 2).length > 0;
+        return this._variant.is_valid_end_turn(this);
     }
 
     public add_throw(new_throw: Score): void {
-        if (this.current_turn_length === 3) {
+        if (this.current_turn_length === this._variant.turn_length) {
             throw Error("Max number of throws done");
         }
 
@@ -93,20 +97,22 @@ export class User {
     }
 
     public current_turn_score(): number {
-        return this._current_turn.reduce((p, c) => p + c.multiplier * c.value, 0);
+        return this._variant.current_turn_score(this);
     }
 
     public current_turn_calculation(): string {
         if (this._current_turn.length == 0) {
-            return `Throw your darts, ${this.name}`;
+            return `Throw your dart${this._variant.turn_length === 1 ? '' : 's'}, ${this.name}`;
         }
 
-        let mapper = (s: Score) => ((s.multiplier > 1) ? `${s.multiplier}x` : '') + s.value.toString();
-        let calculation: string =
-            this._current_turn
-                .map(mapper)
-                .join(" + ");
+        return this._variant.current_turn_calculation(this);
+    }
 
-        return `${calculation} = ${this.current_turn_score()}`;
+    public can_finish(): boolean {
+        return false;
+    }
+
+    public next_throws_suggestion(): string {
+        return "";
     }
 }
