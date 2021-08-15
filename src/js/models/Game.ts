@@ -15,13 +15,13 @@ enum GameState {
 };
 
 export default class Game {
-    private static SCORE_REGEX: RegExp = new RegExp("^([0-9]{1,2}|ib|ob)$");
+    private static SCORE_REGEX: RegExp = new RegExp("^([0-9]{1,2})$");
 
-    private static VARIANTS: Record<string, Variant> = {};
+    private static _VARIANTS: Record<string, Variant> = {};
 
     public users: Array<User> = [];
-    public current_user: number = 0;
-    public winning_user: number = 0;
+    private _current_user: number = 0;
+    private _winning_user: number = 0;
 
     private _game_state: GameState = GameState.INIT;
     private _round: number = 1;
@@ -70,11 +70,15 @@ export default class Game {
     }
 
     public static register_variant(variant: Variant): void {
-        Game.VARIANTS[variant.id] = variant;
+        Game._VARIANTS[variant.id] = variant;
     }
 
     public set_variant(variant_id: string) {
-        this._variant = Game.VARIANTS[variant_id];
+        if (!(variant_id in Game._VARIANTS)) {
+            throw Error("Selected game variant should exist");
+        }
+
+        this._variant = Game._VARIANTS[variant_id];
 
         this.users.forEach(user => user.set_variant(this._variant));
         this._update_init_state();
@@ -84,16 +88,30 @@ export default class Game {
         this._auto_commit = auto_commit;
     }
 
+    public get current_user(): number {
+        return this._current_user;
+    }
+
+    public get winning_user(): number {
+        return this._winning_user;
+    }
+
     public get current_player(): User {
-        return this.users[this.current_user];
+        return this.users[this._current_user];
     }
 
     public start(should_shuffle: boolean): void {
+        if (!this.can_start) {
+            throw Error("Cannot start the game at this moment");
+        }
+
         if (this._variant === null) {
             throw Error("A game variant should be selected before starting the game");
         }
 
-        console.log("playing " + this._variant.human_name);
+        if (this.users.length === 0) {
+            throw Error("Users should be added to start a game");
+        }
 
         if (should_shuffle && !this.state_paused) {
             shuffle_array(this.users);
@@ -103,16 +121,20 @@ export default class Game {
     }
 
     public pause(): void {
+        if (!this.state_started) {
+            throw Error("Game can only be paused if it was started");
+        }
+
         this._game_state = GameState.PAUSED;
     }
 
     public register_score(score: Score): void {
-        if (!Game.SCORE_REGEX.test(score.value.toString())) {
-            throw Error("Score must be valid value");
+        if (!this.state_started) {
+            throw Error("Game should be started to register a score");
         }
 
-        if (this.current_player.current_turn_length === 3) {
-            throw Error("Max number of throws done");
+        if (!Game.SCORE_REGEX.test(score.value.toString())) {
+            throw Error("Score must be a valid value");
         }
 
         this.current_player.add_throw({multiplier: score.multiplier, value: score.value});
@@ -125,14 +147,18 @@ export default class Game {
         this.update_stats();
     }
 
-    public register_bull(bull: number): void {
-        if (bull !== 1 && bull !== 2) {
-            throw Error("Bull value should be 1 or 2");
+    public register_bull(multiplier: number): void {
+        if (!this.state_started) {
+            throw Error("Game should be started to register a bull");
+        }
+
+        if (multiplier !== 1 && multiplier !== 2) {
+            throw Error("Bull multiplier should be 1 or 2");
         }
 
         this.register_score({
             multiplier: 1,
-            value: bull * 25
+            value: multiplier * 25
         });
     }
 
@@ -141,15 +167,23 @@ export default class Game {
     }
 
     public delete_previous(): void {
+        if (!this.state_started) {
+            throw Error("Game should be started to delete a throw");
+        }
+
         this.current_player.delete_throw();
         this.update_stats();
     }
 
     public next_user(): void {
+        if (!this.state_started) {
+            throw Error("Game should be started to advance the user");
+        }
+
         this.current_player.commit_turn(this._round);
 
-        if (++this.current_user >= this.users.length) {
-            this.current_user = 0;
+        if (++this._current_user >= this.users.length) {
+            this._current_user = 0;
             this._round++;
         }
 
@@ -157,11 +191,15 @@ export default class Game {
     }
 
     private update_stats(): void {
+        if (!this.state_started) {
+            throw Error("Game should be started to update the game statistics");
+        }
+
         if (this._auto_commit && this.current_player.current_turn_length === 3) {
             this.current_player.commit_turn(this._round);
 
-            if (++this.current_user >= this.users.length) {
-                this.current_user = 0;
+            if (++this._current_user >= this.users.length) {
+                this._current_user = 0;
                 this._round++;
             }
         }
@@ -180,7 +218,7 @@ export default class Game {
             }
         });
 
-        this.winning_user = lowest_index;
+        this._winning_user = lowest_index;
     }
 
     public current_turn_calculation(): string {
@@ -193,7 +231,7 @@ export default class Game {
         }
 
         if (this.state_finished) {
-            return `Congrats, ${this.users[this.winning_user].name} won!`;
+            return `Congrats, ${this.users[this._winning_user].name} won!`;
         }
 
         if (!this.state_started) {
@@ -208,7 +246,7 @@ export default class Game {
             throw Error("Cannot reset at this moment");
         }
 
-        this.current_user = 0;
+        this._current_user = 0;
         this._game_state = GameState.READY;
         this._round = 1;
 

@@ -73,10 +73,22 @@ export class User {
     }
 
     public add_throw(new_throw: Score): void {
+        if (this.current_turn_length === 3) {
+            throw Error("Max number of throws done");
+        }
+
+        if (new_throw.multiplier < 0 || new_throw.multiplier > 3) {
+            throw Error("The score multiplier should be between 0 and 3");
+        }
+
         this._current_turn.push(new_throw);
     }
 
     public delete_throw(): void {
+        if (this.current_turn_length === 0) {
+            throw Error("Cannot delete a throw when none are entered");
+        }
+
         this._current_turn.pop();
     }
 
