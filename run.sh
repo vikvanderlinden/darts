@@ -7,7 +7,7 @@ server {
 
        server_name darts;
 
-       root /workspaces/darts/dist;
+       root /workspaces/darts/build;
        index index.html;
 
        location / {

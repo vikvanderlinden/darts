@@ -1,6 +1,3 @@
 node_modules/
-dist/*
-!dist/index.html
-docs/*
-!docs/index.html
-!docs/service-worker.js
+build/*
+!build/service-worker.js

@@ -1,37 +1,43 @@
-const path = require('path');
+const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { VueLoaderPlugin } = require('vue-loader');
+const { VueLoaderPlugin } = require("vue-loader");
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     plugins: [
-        new MiniCssExtractPlugin(),
-        new VueLoaderPlugin()
+        new MiniCssExtractPlugin({
+            filename: (process.env.NODE_ENV === "production") ? "main.css?[contenthash]" : "main.css",
+        }),
+        new VueLoaderPlugin(),
+        new WebpackManifestPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, "./src/html/index.html"),
+        }),
     ],
     mode: process.env.NODE_ENV,
     watch: process.env.NODE_ENV === "development",
     entry: './src/js/index.js',
     output: {
-        filename: 'main.js',
-        path: (process.env.NODE_ENV === "production") ?
-            path.resolve(__dirname, 'docs') :
-            path.resolve(__dirname, 'dist'),
+        filename: (process.env.NODE_ENV === "production") ? "main.js?[contenthash]" : "main.js",
+        path: path.resolve(__dirname, "build"),
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: [".tsx", ".ts", ".js"],
         alias: {
-            '@': path.resolve('./src/js')
+            '@': path.resolve("./src/js")
         },
     },
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
+                use: "ts-loader",
                 exclude: /node_modules/,
             },
             {
                 test: /\.vue$/,
-                use: ['vue-loader']
+                use: ["vue-loader"]
             },
             {
                 test: /\.css$/i,

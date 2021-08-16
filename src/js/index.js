@@ -5,7 +5,7 @@ import OhOneGames from "@/game-variants/OhOneGames.ts";
 import { createApp, reactive } from 'vue';
 
 if (process.env.NODE_ENV === 'development') {
-    require('./../../dist/index.html');
+    require('./../html/index.html');
 }
 
 // Create game instance and register variants
