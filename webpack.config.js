@@ -3,6 +3,9 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
+const replace = require("buffer-replace");
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
     plugins: [
@@ -14,10 +17,21 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "./src/html/index.html"),
         }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: "./src/js/service-worker.js",
+                    to: "service-worker.js",
+                    transform(content, _) {
+                        return replace(content, "--VERSION_PLACEHOLDER--", uuidv4());
+                    }
+                }
+            ]
+        }),
     ],
     mode: process.env.NODE_ENV,
     watch: process.env.NODE_ENV === "development",
-    entry: './src/js/index',
+    entry: "./src/js/index",
     output: {
         filename: (process.env.NODE_ENV === "production") ? "main.js?[contenthash]" : "main.js",
         path: path.resolve(__dirname, "build"),
