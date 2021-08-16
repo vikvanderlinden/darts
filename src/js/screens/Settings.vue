@@ -48,7 +48,7 @@
         <div class="mt-4">
             <div v-for="(user,i) in game.users" :key="user.name" class="flex items-center justify-between px-4 py-4 bg-gray-800 first:rounded-t last:rounded-b" :class="{'bg-gray-900': i%2!=0}">
                 <div class="py-3">{{user.name}}</div>
-                <a href="#" @click.stop.prevent="game.remove_user(user)" class="bg-red-600 hover:bg-red-700 px-4 py-3 rounded" v-if="game.can_change_settings">remove user</a>
+                <a href="#" @click.stop.prevent="remove_user(user)" class="bg-red-600 hover:bg-red-700 px-4 py-3 rounded" v-if="game.can_change_settings">remove user</a>
             </div>
         </div>
     </div>
@@ -58,7 +58,7 @@
 export default {
     name: "settings-screen",
     inject: ["game"],
-    props: ["open"],
+    props: ["open", "try_or_error"],
     emits: ["close"],
     data() {
         return {
@@ -67,11 +67,16 @@ export default {
     },
     methods: {
         add_user() {
-            this.game.add_user(this.user_name_input);
-            this.user_name_input = "";
+            this.try_or_error(_ => {
+                this.game.add_user(this.user_name_input);
+                this.user_name_input = "";
+            });
+        },
+        remove_user(user) {
+            this.try_or_error(_ => this.game.remove_user(user));
         },
         update_variant(event) {
-            this.game.set_variant(event.target.value);
+            this.try_or_error(_ => this.game.set_variant(event.target.value));
         }
     }
 }

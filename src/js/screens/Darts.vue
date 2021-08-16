@@ -1,7 +1,8 @@
 <template>
-    <div class="max-h-screen md:h-screen md:flex md:flex-col overflow-auto" :class="{'overflow-hidden': settings_modal_open}">
+    <div class="max-h-screen md:h-screen md:flex md:flex-col" :class="{'overflow-hidden': settings_modal_open}">
         <Settings
             @close="settings_modal_open=false"
+            :try_or_error="try_or_error"
             :open="settings_modal_open"></Settings>
         <div class="max-w-sm mx-auto p-4 text-center">
             <a
@@ -35,6 +36,13 @@
                 @del="bksp"
                 :class="{'pointer-events-none opacity-50': !game.state_started}"></ScoreInput>
         </div>
+        <div class="bg-red-700 bottom-0 fixed flex items-start justify-between left-0 m-4 right-0 rounded-md z-30"
+            :class="{'hidden': !error_visible}">
+            <p class="p-4">{{ error }}</p>
+            <a href="#" @click.prevent="error_visible=false" class="block py-4 px-6 hover:underline cursor-pointer">
+                close
+            </a>
+        </div>
     </div>
 </template>
 
@@ -49,6 +57,9 @@
         data() {
             return {
                 settings_modal_open: false,
+                error: "",
+                error_visible: false,
+                error_timeout: null,
             };
         },
         components: {
@@ -58,26 +69,52 @@
         },
         methods: {
             start_game() {
-                this.game.start();
+                this.try_or_error(_ => this.game.start());
             },
             pause_game() {
-                this.game.pause();
+                this.try_or_error(_ => this.game.pause());
             },
             enter_score(score) {
-                this.game.register_score(score);
+                this.try_or_error(_ => this.game.register_score(score));
             },
             enter_bull(multiplier) {
-                this.game.register_bull(multiplier);
+                this.try_or_error(_ => this.game.register_bull(multiplier));
             },
             enter_miss(multiplier) {
-                this.game.register_miss(multiplier);
+                this.try_or_error(_ => this.game.register_miss(multiplier));
             },
             go_next() {
-                this.game.next_user();
+                this.try_or_error(_ => this.game.next_user());
             },
             bksp() {
-                this.game.delete_previous();
+                this.try_or_error(_ => this.game.delete_previous());
             },
+            try_or_error(func) {
+                try {
+                    func();
+                } catch (error) {
+                    this.show_error(error);
+                }
+            },
+            show_error(error) {
+                if (this.error_timeout !== null) {
+                    clearTimeout(this.error_timeout);
+                    this.error_timeout = null;
+                }
+
+                this.error = error.message;
+                this.error_visible = true;
+                this.error_timeout = setTimeout(this.clear_error, 3000);
+            },
+            clear_error() {
+                this.error_visible = false;
+                this.error = "";
+
+                if (this.error_timeout !== null) {
+                    clearTimeout(this.error_timeout);
+                    this.error_timeout = null;
+                }
+            }
         }
     };
 </script>

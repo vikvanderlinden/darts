@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-2 md:mt-0 mb-4 md:mb-0 p-2 max-w-sm w-full mx-auto">
+    <div class="mt-2 md:mt-0 md:mb-0 p-2 pb-6 max-w-sm w-full mx-auto">
         <div class="flex gap-2">
             <StickyButton :selected="score_multiplier === 2" @click="toggle_score_multiplier(2)" title="Double"></StickyButton>
             <StickyButton :selected="score_multiplier === 3" @click="toggle_score_multiplier(3)" title="Triple"></StickyButton>

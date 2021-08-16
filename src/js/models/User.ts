@@ -16,7 +16,7 @@ export class User {
 
     public constructor(name: string, variant: Variant) {
         if (!User.NAME_REGEX.test(name)) {
-            throw Error("The name must be alphanumeric with - or _ and max 20 characters");
+            throw Error("The name must be alphanumeric with spaces, - or _ and max 20 characters");
         }
 
         this._name = name;
