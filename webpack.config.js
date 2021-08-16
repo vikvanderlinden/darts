@@ -17,7 +17,7 @@ module.exports = {
     ],
     mode: process.env.NODE_ENV,
     watch: process.env.NODE_ENV === "development",
-    entry: './src/js/index.js',
+    entry: './src/js/index',
     output: {
         filename: (process.env.NODE_ENV === "production") ? "main.js?[contenthash]" : "main.js",
         path: path.resolve(__dirname, "build"),

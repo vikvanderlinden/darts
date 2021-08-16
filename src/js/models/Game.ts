@@ -219,10 +219,6 @@ export default class Game {
     }
 
     private update_stats(): void {
-        if (!this.state_started) {
-            throw Error("Game should be started to update the game statistics");
-        }
-
         if (this._auto_commit_turns &&
             this.current_player.current_turn_length === this._variant.turn_length) {
 
