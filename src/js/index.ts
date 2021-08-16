@@ -1,7 +1,9 @@
 import './../css/index.css'
-import Darts from '@/screens/Darts.vue';
-import Game from "@/models/Game.ts";
-import OhOneGames from "@/game-variants/OhOneGames.ts";
+// @ts-ignore
+import Darts from "./screens/Darts.vue";
+import Game from "./models/Game";
+import OhOneGames from "./game-variants/OhOneGames";
+import RoundTheBoard from "./game-variants/RoundTheBoard";
 import { createApp, reactive } from 'vue';
 
 if (process.env.NODE_ENV === 'development') {
