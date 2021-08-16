@@ -10,8 +10,8 @@ export default class OhOneGames implements Variant {
     private _turn_length: number = 3;
     private _keyboard_disabled_keys: Array<string> = [];
 
-    constructor(init_score: number) {
-        this._init_score = init_score;
+    constructor(init_score?: number) {
+        this._init_score = init_score ?? 501;
 
         this.register();
     }
@@ -71,7 +71,7 @@ export default class OhOneGames implements Variant {
     current_turn_calculation(user: User): string {
         const multipliers: Record<number, string> = {
             0: '',
-            1: '',
+            1: 'S',
             2: 'D',
             3: 'T'
         };
