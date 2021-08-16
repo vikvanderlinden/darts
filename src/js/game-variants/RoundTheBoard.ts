@@ -73,9 +73,9 @@ export default class RoundTheBoard implements Variant {
         let calculation: string =
             user.current_turn
                 .map((s: Score) => s.value.toString())
-                .join(" + ");
+                .join(" - ");
 
-        return `${calculation} = ${user.current_turn_score()}`;
+        return `${calculation}`;
 
     }
 }

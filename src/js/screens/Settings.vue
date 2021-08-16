@@ -24,7 +24,6 @@
             <label for="variant">Game Variant <span class="text-gray-500 text-sm">(Additional game variants will be implemented later)</span></label>
             <select @change="update_variant" class="cursor-default px-4 py-3 bg-gray-700 rounded block mt-2" id="variant" :class="{'cursor-pointer': game.can_change_settings}" :disabled="!game.can_change_settings">
                 <option v-for="variant in game.variants" :value="variant.id" :key="variant.id">{{ variant.human_name }}</option>
-                <option value="round-the-board">Round the Board</option>
                 <option value="cricket" disabled>Cricket</option>
                 <option value="baseball" disabled>Baseball</option>
                 <option value="killer" disabled>Killer</option>

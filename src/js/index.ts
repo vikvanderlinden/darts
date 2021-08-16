@@ -14,6 +14,7 @@ if (process.env.NODE_ENV === 'development') {
 let game = reactive(new Game());
 let variants = [
     new OhOneGames(),
+    new RoundTheBoard(),
 ];
 game.set_variant("01-games");
 
