@@ -1,6 +1,7 @@
-import { Variant, Score } from "./Variant";
+import { Variant } from "./Variant";
 import Game from "./../models/Game";
 import { User } from "./../models/User";
+import { Score } from "../datatypes";
 
 export default class RoundTheBoard implements Variant {
     private _id: string = "round-the-board";

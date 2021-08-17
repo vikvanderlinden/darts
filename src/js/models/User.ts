@@ -1,9 +1,5 @@
 import { Variant } from "./../game-variants/Variant";
-
-type Score = {
-    multiplier: number,
-    value: number,
-};
+import { Score } from "../datatypes";
 
 export class User {
     private static NAME_REGEX: RegExp = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9-_ ]{0,19}$');

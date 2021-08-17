@@ -1,11 +1,6 @@
 import Game from "./../models/Game";
 import { User } from "./../models/User";
 
-export type Score = {
-    multiplier: number,
-    value: number,
-};
-
 // Acts as abstract class/interface to define
 //  functions to be implemented by each variant
 //  of the game.
@@ -16,6 +11,8 @@ export interface Variant {
     get init_score(): number;
     get turn_length(): number;
     get keyboard_disabled_keys(): Array<string>;
+
+    // get settings(): Record<string,string>;
 
     register(): void;
 

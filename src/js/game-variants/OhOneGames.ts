@@ -1,6 +1,7 @@
-import { Variant, Score } from "./Variant";
+import { Variant } from "./Variant";
 import Game from "./../models/Game";
 import { User } from "./../models/User";
+import { Score } from "../datatypes";
 
 export default class OhOneGames implements Variant {
     private _id = "01-games";

@@ -1,18 +1,6 @@
 import { User } from "./User";
 import { Variant } from "./../game-variants/Variant";
-
-type Score = {
-    multiplier: number,
-    value: number,
-};
-
-enum GameState {
-    INIT,   // Not ready to start
-    READY,  // Ready to start
-    STARTED,// Game running
-    PAUSED, // Game stopped temporarily
-    FINISHED// Game done, somebody won
-};
+import { GameState, Score } from "../datatypes";
 
 export default class Game {
     private static SCORE_REGEX: RegExp = new RegExp("^([0-9]{1,2})$");
