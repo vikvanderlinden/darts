@@ -1,6 +1,6 @@
 import { User } from "./User";
 import { Variant } from "./../game-variants/Variant";
-import { GameState, Score } from "../datatypes";
+import { BooleanSetting, GameState, Score, SelectionSetting } from "../datatypes";
 
 export default class Game {
     private static SCORE_REGEX: RegExp = new RegExp("^([0-9]{1,2})$");
@@ -56,6 +56,13 @@ export default class Game {
 
     public get round(): number {
         return this._round;
+    }
+
+    public get variant_settings(): Record<string,Array<BooleanSetting>|Array<SelectionSetting>> {
+        return {
+            "boolean": this._variant.boolean_settings,
+            "selection": this._variant.selection_settings,
+        }
     }
 
     public static register_variant(variant: Variant): void {

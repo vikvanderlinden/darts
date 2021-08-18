@@ -1,7 +1,7 @@
 import { Variant } from "./Variant";
 import Game from "./../models/Game";
 import { User } from "./../models/User";
-import { Score } from "../datatypes";
+import { BooleanSetting, Score, SelectionSetting } from "../datatypes";
 
 export default class OhOneGames implements Variant {
     private _id = "01-games";
@@ -10,6 +10,29 @@ export default class OhOneGames implements Variant {
     private _init_score: number;
     private _turn_length: number = 3;
     private _keyboard_disabled_keys: Array<string> = [];
+
+    private _boolean_settings: Array<BooleanSetting> = [
+        {
+            id: "double-in",
+            title: "Double In",
+            default_value: true,
+            selected_value: true,
+        },{
+            id: "double-out",
+            title: "Double Out",
+            default_value: true,
+            selected_value: true,
+        },
+    ];
+    private _selection_settings: Array<SelectionSetting> = [
+        {
+            id: "init-score",
+            title: "Starting Score",
+            options: [101,301,501,701,901,1101,1301,1501,1701],
+            default_value: 501,
+            selected_value: 501,
+        },
+    ];
 
     constructor(init_score?: number) {
         this._init_score = init_score ?? 501;
@@ -35,6 +58,14 @@ export default class OhOneGames implements Variant {
 
     get keyboard_disabled_keys(): Array<string> {
         return this._keyboard_disabled_keys;
+    }
+
+    get boolean_settings(): Array<BooleanSetting> {
+        return this._boolean_settings;
+    }
+
+    get selection_settings(): Array<SelectionSetting> {
+        return this._selection_settings;
     }
 
     register(): void {

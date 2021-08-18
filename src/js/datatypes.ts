@@ -10,3 +10,13 @@ export type Score = {
     multiplier: number,
     value: number,
 };
+
+type Setting<DataType> = {
+    id: string,
+    title: string,
+    default_value: DataType,
+    selected_value: DataType,
+};
+
+export type BooleanSetting = Setting<boolean>;
+export type SelectionSetting = Setting<number> & {options: Array<number>};

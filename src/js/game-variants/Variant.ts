@@ -1,3 +1,4 @@
+import { BooleanSetting, SelectionSetting } from "../datatypes";
 import Game from "./../models/Game";
 import { User } from "./../models/User";
 
@@ -12,7 +13,8 @@ export interface Variant {
     get turn_length(): number;
     get keyboard_disabled_keys(): Array<string>;
 
-    // get settings(): Record<string,string>;
+    get boolean_settings(): Array<BooleanSetting>;
+    get selection_settings(): Array<SelectionSetting>;
 
     register(): void;
 

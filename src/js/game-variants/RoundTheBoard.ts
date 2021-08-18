@@ -1,7 +1,7 @@
 import { Variant } from "./Variant";
 import Game from "./../models/Game";
 import { User } from "./../models/User";
-import { Score } from "../datatypes";
+import { BooleanSetting, Score, SelectionSetting } from "../datatypes";
 
 export default class RoundTheBoard implements Variant {
     private _id: string = "round-the-board";
@@ -10,6 +10,9 @@ export default class RoundTheBoard implements Variant {
     private _init_score: number = 20;
     private _turn_length: number = 3;
     private _keyboard_disabled_keys: Array<string> = [];
+
+    private _boolean_settings: Array<BooleanSetting> = [];
+    private _selection_settings: Array<SelectionSetting> = [];
 
     constructor() {
         this.register();
@@ -33,6 +36,14 @@ export default class RoundTheBoard implements Variant {
 
     get keyboard_disabled_keys(): Array<string> {
         return this._keyboard_disabled_keys;
+    }
+
+    get boolean_settings(): Array<BooleanSetting> {
+        return this._boolean_settings;
+    }
+
+    get selection_settings(): Array<SelectionSetting> {
+        return this._selection_settings;
     }
 
     register(): void {
