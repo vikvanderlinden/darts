@@ -60,6 +60,10 @@ export default class RoundTheBoard implements Variant {
             this.is_valid_end_turn(user));
     }
 
+    is_valid_start_turn(user: User): boolean {
+        return true;
+    }
+
     is_valid_end_turn(user: User): boolean {
         return true;
     }

@@ -49,7 +49,9 @@ export default class OhOneGames implements Variant {
     }
 
     get init_score(): number {
-        return this._init_score;
+        return this.selection_settings.find(
+            (value) => value.id === "init-score"
+        ).selected_value;
     }
 
     get turn_length(): number {
@@ -85,8 +87,20 @@ export default class OhOneGames implements Variant {
                 this.is_valid_end_turn(user));
     }
 
+    is_valid_start_turn(user: User): boolean {
+        if (this.boolean_settings.find(value => value.id === "double-in").selected_value) {
+            return user.current_turn.filter(value => value.multiplier === 2).length > 0;
+        } else {
+            return true;
+        }
+    }
+
     is_valid_end_turn(user: User): boolean {
-        return user.current_turn[user.current_turn_length - 1].multiplier === 2;
+        if (this.boolean_settings.find(value => value.id === "double-out").selected_value) {
+            return user.current_turn[user.current_turn_length - 1].multiplier === 2;
+        } else {
+            return true;
+        }
     }
 
     current_turn_is_bust(user: User): boolean {
@@ -97,7 +111,18 @@ export default class OhOneGames implements Variant {
     }
 
     current_turn_score(user: User): number {
-        return user.current_turn.reduce((p, c) => p + c.multiplier * c.value, 0);
+        let valid_throws = user.current_turn;
+
+        if (user.score === this.init_score && this.boolean_settings.find(value => value.id === "double-in").selected_value) {
+            let doubled_in = false;
+            valid_throws = valid_throws.filter(value => {
+                if (value.multiplier === 2) {
+                    doubled_in = true;
+                }
+                return doubled_in;
+            });
+        }
+        return valid_throws.reduce((p, c) => p + c.multiplier * c.value, 0);
     }
 
     current_turn_calculation(user: User): string {

@@ -20,6 +20,7 @@ export interface Variant {
 
     register_bull(game: Game, multiplier: number): void;
     is_out(user: User): boolean;
+    is_valid_start_turn(user: User): boolean;
     is_valid_end_turn(user: User): boolean;
     current_turn_is_bust(user: User): boolean;
     current_turn_score(user: User): number;

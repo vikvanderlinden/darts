@@ -61,7 +61,8 @@ export class User {
 
         this._history[round] = this._current_turn;
 
-        if (!this._variant.current_turn_is_bust(this)) {
+        if (!this._variant.current_turn_is_bust(this) &&
+            !(this.score === this._variant.init_score && !this._variant.is_valid_start_turn(this))) {
             this._score -= score;
         }
 
