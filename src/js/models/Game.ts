@@ -112,6 +112,16 @@ export default class Game {
         return this.users[this._current_user];
     }
 
+    public get keyboard_disabled_keys(): Array<string> {
+        let disabled_keys = [...this._variant.keyboard_disabled_keys];
+
+        if (this.users.length > 0 && this._variant.turn_length === this.current_player.current_turn_length) {
+            disabled_keys.push("inputs");
+        }
+
+        return disabled_keys;
+    }
+
     public start(): void {
         if (!this.can_start) {
             throw Error("Cannot start the game at this moment");

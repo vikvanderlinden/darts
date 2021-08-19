@@ -9,7 +9,7 @@ export default class RoundTheBoard implements Variant {
 
     private _init_score: number = 20;
     private _turn_length: number = 3;
-    private _keyboard_disabled_keys: Array<string> = [];
+    private _keyboard_disabled_keys: Array<string> = ["b"];
 
     private _boolean_settings: Array<BooleanSetting> = [];
     private _selection_settings: Array<SelectionSetting> = [];

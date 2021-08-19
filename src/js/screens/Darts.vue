@@ -34,6 +34,7 @@
                 @next="go_next"
                 @miss="enter_miss"
                 @del="bksp"
+                :disabled="game.keyboard_disabled_keys"
                 :class="{'pointer-events-none opacity-50': !game.state_started}"></ScoreInput>
         </div>
         <div class="bg-red-700 bottom-0 fixed flex items-start justify-between left-0 m-4 right-0 rounded-md z-30"

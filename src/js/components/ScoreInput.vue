@@ -1,18 +1,34 @@
 <template>
     <div class="mt-2 md:mt-0 md:mb-0 p-2 pb-6 max-w-sm w-full mx-auto">
         <div class="flex gap-2">
-            <StickyButton :selected="score_multiplier === 2" @click="toggle_score_multiplier(2)" title="Double"></StickyButton>
-            <StickyButton :selected="score_multiplier === 3" @click="toggle_score_multiplier(3)" title="Triple"></StickyButton>
-            <a class="score-btn flex-1 red-btn" @click.stop.prevent="emit_miss()" href="#">Miss</a>
+            <StickyButton
+                :selected="score_multiplier === 2"
+                :class="{'pointer-events-none opacity-50': in_disabled(['double', 'multipliers', 'inputs'])}"
+                @click="toggle_score_multiplier(2)"
+                title="Double"></StickyButton>
+            <StickyButton
+                :selected="score_multiplier === 3"
+                :class="{'pointer-events-none opacity-50': in_disabled(['triple', 'multipliers', 'inputs'])}"
+                @click="toggle_score_multiplier(3)"
+                title="Triple"></StickyButton>
+            <a class="score-btn flex-1 red-btn"
+                @click.stop.prevent="emit_miss()"
+                :class="{'pointer-events-none opacity-50': in_disabled(['miss', 'inputs'])}"
+                href="#">Miss</a>
         </div>
         <div v-for="i in [0,1,2,3]" :key="i" class="flex justify-between mt-4">
-            <a class="score-btn" v-for="j in [1,2,3,4,5]" :key="5*i+j" @click.stop.prevent="emit_score(5*i+j)" href="#">{{ 5*i + j }}</a>
+            <a class="score-btn"
+                v-for="j in [1,2,3,4,5]"
+                :key="5*i+j"
+                :class="{'pointer-events-none opacity-50': in_disabled([5*i+j, 'inputs'])}"
+                @click.stop.prevent="emit_score(5*i+j)"
+                href="#">{{ 5*i + j }}</a>
         </div>
         <div class="flex gap-2 mt-4">
-            <a class="score-btn flex-1 red-btn" @click.stop.prevent="emit_del()" href="#">Del</a>
-            <a class="score-btn flex-1" @click.stop.prevent="emit_bull(1)" href="#">Outer</a>
-            <a class="score-btn flex-1" @click.stop.prevent="emit_bull(2)" href="#">Bull</a>
-            <a class="score-btn flex-1 green-btn" @click.stop.prevent="emit_next()" href="#">></a>
+            <a class="score-btn flex-1 red-btn" :class="{'pointer-events-none opacity-50': in_disabled(['del', 'actions'])}" @click.stop.prevent="emit_del()" href="#">Del</a>
+            <a class="score-btn flex-1" :class="{'pointer-events-none opacity-50': in_disabled(['ob', 'b', 'inputs'])}" @click.stop.prevent="emit_bull(1)" href="#">Outer</a>
+            <a class="score-btn flex-1" :class="{'pointer-events-none opacity-50': in_disabled(['ib', 'b', 'inputs'])}" @click.stop.prevent="emit_bull(2)" href="#">Bull</a>
+            <a class="score-btn flex-1 green-btn" :class="{'pointer-events-none opacity-50': in_disabled(['del', 'actions'])}" @click.stop.prevent="emit_next()" href="#">></a>
         </div>
     </div>
 </template>
@@ -25,6 +41,7 @@ export default {
     components: {
         StickyButton,
     },
+    props: ["disabled"],
     data() {
         return {
             score_multiplier: 1,
@@ -32,6 +49,11 @@ export default {
     },
     emits: ["score", "bull", "next", "miss", "del"],
     methods: {
+        in_disabled(value) {
+            let items = Array.isArray(value) ? value : [value];
+
+            return items.reduce((prev,curr) => prev || this.disabled.includes(curr.toString()), false);
+        },
         toggle_score_multiplier(n) {
             if (this.score_multiplier === n) {
                 this.reset_score_multiplier();
