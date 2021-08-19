@@ -1,13 +1,17 @@
 import './../css/index.css'
 // @ts-ignore
-import Darts from "./screens/Darts.vue";
+import GameBoard from "./screens/GameBoard.vue";
+// @ts-ignore
+import Settings from "./screens/Settings.vue";
 import Game from "./models/Game";
 import OhOneGames from "./game-variants/OhOneGames";
 import RoundTheBoard from "./game-variants/RoundTheBoard";
-import { createApp, reactive } from 'vue';
+import { errorStore } from "./stores/ErrorStore";
+import { createApp, reactive } from "vue";
+import { createRouter, createWebHashHistory } from "vue-router";
 
-if (process.env.NODE_ENV === 'development') {
-    require('./../html/index.html');
+if (process.env.NODE_ENV === "development") {
+    require("./../html/index.html");
 }
 
 // Create game instance and register variants
@@ -18,9 +22,20 @@ let variants = [
 ];
 game.set_variant("01-games");
 
+// Create router instance
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes: [
+        { path: "/", component: GameBoard },
+        { path: "/settings", component: Settings },
+    ],
+});
+
 // Create vuejs instance
-const app = createApp(Darts);
-app.provide('game', game);
+const app = createApp({});
+app.use(router);
+app.use(errorStore);
+app.provide("game", game);
 app.mount("#app");
 
 // Register service-worker for offline use

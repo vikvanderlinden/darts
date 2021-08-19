@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-black fixed h-full px-8 py-4 w-full z-10 block max-h-full overflow-auto" :class="{'hidden': !open}">
+    <div class="bg-black fixed h-full px-8 py-4 w-full z-10 block max-h-full overflow-auto">
         <div class="max-w-xl m-auto">
             <div class="flex flex-wrap justify-center mb-4">
                 <a class="mt-1" href="https://github.com/vikvanderlinden/darts/blob/main/LICENSE" target="_blank">
@@ -18,7 +18,7 @@
 
             <div class="flex items-stretch justify-between">
                 <div class="text-3xl">Settings</div>
-                <a href="#" @click.stop.prevent="$emit('close')" class="bg-gray-700 hover:bg-gray-800 px-3 py-2 rounded">Close settings</a>
+                <router-link to="/" class="bg-gray-700 hover:bg-gray-800 px-3 py-2 rounded">Close settings</router-link>
             </div>
 
             <div class="mt-4">
@@ -64,8 +64,6 @@
     export default {
         name: "settings-screen",
         inject: ["game"],
-        props: ["open", "try_or_error"],
-        emits: ["close"],
         components: {
             VariantSettings,
         },
@@ -76,16 +74,16 @@
         },
         methods: {
             add_user() {
-                this.try_or_error(_ => {
+                this.$store.commit("try_or_error", _ => {
                     this.game.add_user(this.user_name_input);
                     this.user_name_input = "";
                 });
             },
             remove_user(user) {
-                this.try_or_error(_ => this.game.remove_user(user));
+                this.$store.commit("try_or_error", _ => this.game.remove_user(user));
             },
             update_variant(event) {
-                this.try_or_error(_ => this.game.set_variant(event.target.value));
+                this.$store.commit("try_or_error", _ => this.game.set_variant(event.target.value));
             }
         }
     }

@@ -15,6 +15,16 @@
     <link rel="canonical" href="https://darts.vikvanderlinden.be/">
 </head>
 <body class="bg-black text-white">
-    <div id="app"></div>
+    <div id="app">
+        <router-view></router-view>
+
+        <div class="bg-red-700 bottom-0 fixed flex items-start justify-between left-0 m-4 right-0 rounded-md z-30"
+            :class="{'hidden': !$store.state.error_visible}">
+            <p class="p-4">{{ $store.state.error }}</p>
+            <a href="#" @click.prevent="$store.commit('close_error')" class="block py-4 px-6 hover:underline cursor-pointer">
+                close
+            </a>
+        </div>
+    </div>
 </body>
 </html>
