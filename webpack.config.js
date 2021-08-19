@@ -39,7 +39,8 @@ module.exports = {
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
         alias: {
-            '@': path.resolve("./src/js")
+            '@': path.resolve("./src/js"),
+            vue: "vue/dist/vue.esm-bundler.js"
         },
     },
     module: {
