@@ -1,20 +1,7 @@
 <template>
     <div class="bg-black fixed h-full px-8 py-4 w-full z-10 block max-h-full overflow-auto">
         <div class="max-w-xl m-auto">
-            <div class="flex flex-wrap justify-center mb-4">
-                <a class="mt-1" href="https://github.com/vikvanderlinden/darts/blob/main/LICENSE" target="_blank">
-                    <img class="rounded-sm" src="https://flat.badgen.net/badge/license/MIT/blue" alt="MIT License">
-                </a>
-                <a class="ml-1 mt-1" href="https://github.com/vikvanderlinden/darts/" target="_blank">
-                    <img class="rounded-sm" src="https://flat.badgen.net/github/release/vikvanderlinden/darts?label=version&cache=300" alt="Version">
-                </a>
-                <a class="ml-1 mt-1" href="https://github.com/vikvanderlinden/darts/issues" target="_blank">
-                    <img class="rounded-sm" src="https://flat.badgen.net/github/open-issues/vikvanderlinden/darts?label=bugs,%20issues,%20suggestions?&cache=300" alt="Bugs, issues or suggestions?">
-                </a>
-                <a class="ml-1 mt-1" href="https://github.com/vikvanderlinden" target="_blank">
-                    <img class="rounded-sm" src="https://flat.badgen.net/badge/By%20Vik,%20made%20with/%E2%9D%A4/red" alt="By Vik, made with ♥">
-                </a>
-            </div>
+            <TopLabels class="mb-4"></TopLabels>
 
             <div class="flex items-stretch justify-between">
                 <div class="text-3xl">Settings</div>
@@ -68,7 +55,7 @@
                     <input v-model="user_name_input" placeholder="User name" class="bg-gray-700 flex-shrink min-w-0 px-4 py-3 rounded text-white">
                     <input @click.stop.prevent="add_user" type="submit" class="bg-green-600 hover:bg-green-700 ml-1 px-4 py-3 rounded cursor-pointer">
                 </form>
-                <div class="mt-4">
+                <div class="mt-4" v-if="game.users.length > 0">
                     <div v-for="(user,i) in game.users" :key="user.name" class="flex items-center justify-between px-4 py-4 bg-gray-700 first:rounded-t last:rounded-b" :class="{'bg-gray-800': i%2!=0}">
                         <div class="py-3">{{user.name}}</div>
                         <a href="#" @click.stop.prevent="remove_user(user)" class="bg-red-600 hover:bg-red-700 px-4 py-3 rounded" v-if="game.can_change_settings">remove user</a>
@@ -85,12 +72,14 @@
 
 <script>
     import VariantSettings from "@/components/VariantSettings.vue";
+    import TopLabels from "@/components/TopLabels.vue";
 
     export default {
         name: "settings-screen",
         inject: ["game"],
         components: {
             VariantSettings,
+            TopLabels,
         },
         data() {
             return {
