@@ -58,11 +58,33 @@ export default class Game {
         return this._round;
     }
 
-    public get variant_settings(): Record<string,Array<BooleanSetting>|Array<SelectionSetting>> {
+    public get current_variant(): string {
+        return this._variant.id;
+    }
+
+    public get variant_settings(): Record<string,Record<string,BooleanSetting>|Record<string,SelectionSetting>> {
         return {
             "boolean": this._variant.boolean_settings,
             "selection": this._variant.selection_settings,
         }
+    }
+
+    public toggle_variant_bool(id: string): void {
+        if (!this.can_change_settings) {
+            throw Error("Cannot change the variant settings during an active game");
+        }
+
+        this._variant.toggle_bool(id);
+        this.reset();
+    }
+
+    public set_variant_selection(id: string, value: string): void {
+        if (!this.can_change_settings) {
+            throw Error("Cannot change the variant settings during an active game");
+        }
+
+        this._variant.set_selection(id, value);
+        this.reset();
     }
 
     public static register_variant(variant: Variant): void {
@@ -273,10 +295,6 @@ export default class Game {
     }
 
     public reset(): void {
-        if (!this.can_reset) {
-            throw Error("Cannot reset at this moment");
-        }
-
         this._current_user = 0;
         this._game_state = GameState.READY;
         this._round = 1;

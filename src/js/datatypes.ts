@@ -12,7 +12,6 @@ export type Score = {
 };
 
 type Setting<DataType> = {
-    id: string,
     title: string,
     default_value: DataType,
     selected_value: DataType,

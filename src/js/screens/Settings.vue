@@ -27,8 +27,15 @@
                 <div v-if="!game.can_change_settings" class="text-red-400 text-xl underline">You cannot change the variant settings when a game is active!</div>
                 <div>
                     <label for="variant" class="text-xl">Game Variant <span class="text-gray-500 text-sm">(Additional game variants will be implemented later)</span></label>
-                    <select @change="update_variant" class="cursor-default px-4 py-3 bg-gray-700 rounded block mt-2 w-full" id="variant" :class="{'cursor-pointer': game.can_change_settings}" :disabled="!game.can_change_settings">
-                        <option v-for="variant in game.variants" :value="variant.id" :key="variant.id">{{ variant.human_name }}</option>
+                    <select @change="update_variant"
+                        class="cursor-default px-4 py-3 bg-gray-700 rounded block mt-2 w-full"
+                        id="variant"
+                        :value="game.current_variant"
+                        :class="{'cursor-pointer': game.can_change_settings}"
+                        :disabled="!game.can_change_settings">
+                        <option v-for="variant in game.variants"
+                            :value="variant.id"
+                            :key="variant.id">{{ variant.human_name }}</option>
                         <option value="cricket" disabled>Cricket</option>
                         <option value="baseball" disabled>Baseball</option>
                         <option value="killer" disabled>Killer</option>
@@ -44,7 +51,11 @@
                 </div>
                 <hr class="border-t-2 border-gray-500 mt-4">
                 <div class="mt-4">
-                    <VariantSettings :can_update="game.can_change_settings" :settings="game.variant_settings"></VariantSettings>
+                    <VariantSettings
+                        @toggle_bool="toggle_variant_bool"
+                        @set_selection="set_variant_selection"
+                        :can_update="game.can_change_settings"
+                        :settings="game.variant_settings"></VariantSettings>
                 </div>
             </div>
             <div v-if="active_tab==='users'" class="w-full bg-gray-900 rounded p-4">
@@ -64,7 +75,7 @@
             </div>
             <div v-if="active_tab==='data'" class="w-full bg-gray-900 rounded p-4">
                 <h2 class="text-xl">Your Data</h2>
-                <p>This will be filled in later.</p>
+                <p>No data is saved at this moment, this section will be populated later.</p>
             </div>
         </div>
     </div>
@@ -89,16 +100,25 @@
         },
         methods: {
             add_user() {
-                this.$store.commit("try_or_error", _ => {
+                this.tor(_ => {
                     this.game.add_user(this.user_name_input);
                     this.user_name_input = "";
                 });
             },
             remove_user(user) {
-                this.$store.commit("try_or_error", _ => this.game.remove_user(user));
+                this.tor(_ => this.game.remove_user(user));
             },
             update_variant(event) {
-                this.$store.commit("try_or_error", _ => this.game.set_variant(event.target.value));
+                this.tor(_ => this.game.set_variant(event.target.value));
+            },
+            toggle_variant_bool(id) {
+                this.tor(_ => this.game.toggle_variant_bool(id));
+            },
+            set_variant_selection(id, value) {
+                this.tor(_ => this.game.set_variant_selection(id, value));
+            },
+            tor(func) {
+                this.$store.commit("try_or_error", func);
             }
         }
     }

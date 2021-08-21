@@ -11,8 +11,8 @@ export default class RoundTheBoard implements Variant {
     private _turn_length: number = 3;
     private _keyboard_disabled_keys: Array<string> = ["b"];
 
-    private _boolean_settings: Array<BooleanSetting> = [];
-    private _selection_settings: Array<SelectionSetting> = [];
+    private _boolean_settings: Record<string,BooleanSetting> = {};
+    private _selection_settings: Record<string,SelectionSetting> = {};
 
     constructor() {
         this.register();
@@ -38,16 +38,24 @@ export default class RoundTheBoard implements Variant {
         return this._keyboard_disabled_keys;
     }
 
-    get boolean_settings(): Array<BooleanSetting> {
+    get boolean_settings(): Record<string,BooleanSetting> {
         return this._boolean_settings;
     }
 
-    get selection_settings(): Array<SelectionSetting> {
+    get selection_settings(): Record<string,SelectionSetting> {
         return this._selection_settings;
     }
 
     register(): void {
         Game.register_variant(this);
+    }
+
+    toggle_bool(id: string): void {
+        throw Error("There are no setting for this game variant");
+    }
+
+    set_selection(id: string, value: string): void {
+        throw Error("There are no setting for this game variant");
     }
 
     register_bull(game: Game, multiplier: number): void {

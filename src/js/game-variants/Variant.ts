@@ -13,10 +13,13 @@ export interface Variant {
     get turn_length(): number;
     get keyboard_disabled_keys(): Array<string>;
 
-    get boolean_settings(): Array<BooleanSetting>;
-    get selection_settings(): Array<SelectionSetting>;
+    get boolean_settings(): Record<string,BooleanSetting>;
+    get selection_settings(): Record<string,SelectionSetting>;
 
     register(): void;
+
+    toggle_bool(id: string): void;
+    set_selection(id: string, value: string): void;
 
     register_bull(game: Game, multiplier: number): void;
     is_out(user: User): boolean;
