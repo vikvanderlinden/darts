@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-black fixed h-full px-8 py-4 w-full z-10 block max-h-full overflow-auto">
+    <div class="bg-black fixed h-full px-6 py-4 w-full z-10 block max-h-full overflow-auto">
         <div class="max-w-xl m-auto">
             <TopLabels class="mb-4"></TopLabels>
             <div class="flex items-stretch justify-between">

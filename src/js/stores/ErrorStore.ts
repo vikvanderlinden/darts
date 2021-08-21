@@ -20,7 +20,7 @@ export const errorStore = createStore({
         },
         show_error(state, error: Error) {
             if (this.error_timeout !== null) {
-                clearTimeout(this.error_timeout);
+                clearTimeout(state.error_timeout);
                 state.error_timeout = null;
             }
 
@@ -38,7 +38,7 @@ export const errorStore = createStore({
             }
         },
         close_error(state) {
-            state.error_visible = false;
+            this.commit("clear_error");
         }
     }
 });
