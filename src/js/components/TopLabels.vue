@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-wrap justify-center h-6">
+    <div class="flex flex-wrap justify-center">
         <a class="mt-1" href="https://github.com/vikvanderlinden/darts/blob/main/LICENSE" target="_blank">
             <img class="rounded-sm" src="https://flat.badgen.net/badge/license/MIT/blue" alt="MIT License">
         </a>

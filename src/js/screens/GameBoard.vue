@@ -1,28 +1,28 @@
 <template>
     <div class="max-h-screen md:h-screen md:flex md:flex-col">
-        <div class="max-w-md mx-auto p-4 text-center">
+        <div class="max-w-md mx-auto py-4 px-1 text-center">
             <router-link
-                class="bg-gray-700 hover:bg-gray-800 px-3 py-2 rounded"
-                to="/about">?</router-link>
-            <router-link
-                class="bg-gray-700 hover:bg-gray-800 px-3 py-2 rounded ml-2"
+                class="bg-gray-700 hover:bg-gray-800 px-3 py-2 rounded inline-block"
                 to="/settings">Settings</router-link>
             <a
                 :class="{'bg-red-700 hover:bg-red-800': game.can_reset, 'bg-gray-800 pointer-events-none cursor-default': !game.can_reset}"
-                class="ml-2 px-3 py-2 rounded"
+                class="ml-1 px-3 py-2 rounded inline-block"
                 href="#"
                 @click.stop.prevent="game.reset()">Reset Game</a>
             <a
                 v-if="!game.state_started"
                 :class="{'bg-green-700 hover:bg-green-800': game.can_start, 'bg-gray-800 pointer-events-none cursor-default': !game.can_start}"
-                class="ml-2 px-3 py-2 rounded"
+                class="ml-1 px-3 py-2 rounded inline-block"
                 href="#"
                 @click.stop.prevent="start_game">Start Game</a>
             <a
                 v-if="game.state_started"
-                class="ml-2 bg-red-700 hover:bg-red-800 px-3 py-2 rounded"
+                class="ml-1 bg-red-700 hover:bg-red-800 px-3 py-2 rounded inline-block"
                 href="#"
                 @click.stop.prevent="pause_game">Pause Game</a>
+            <router-link
+                class="bg-gray-700 hover:bg-gray-800 px-3 py-2 rounded ml-1 inline-block"
+                to="/about">?</router-link>
         </div>
         <div class="md:flex items-center md:flex-1">
             <ScoreCounter></ScoreCounter>

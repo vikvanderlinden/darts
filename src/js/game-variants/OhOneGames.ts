@@ -14,8 +14,8 @@ export default class OhOneGames implements Variant {
     private _boolean_settings: Record<string,BooleanSetting> = {
         "double-in": {
             title: "Double In",
-            default_value: true,
-            selected_value: true,
+            default_value: false,
+            selected_value: false,
         },
         "double-out": {
             title: "Double Out",

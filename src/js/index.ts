@@ -5,6 +5,8 @@ import GameBoard from "./screens/GameBoard.vue";
 import Settings from "./screens/Settings.vue";
 // @ts-ignore
 import About from "./screens/About.vue";
+// @ts-ignore
+import Tos from "./screens/Tos.vue";
 import Game from "./models/Game";
 import OhOneGames from "./game-variants/OhOneGames";
 import RoundTheBoard from "./game-variants/RoundTheBoard";
@@ -31,6 +33,7 @@ const router = createRouter({
         { path: "/", component: GameBoard },
         { path: "/settings", component: Settings },
         { path: "/about", component: About },
+        { path: "/terms-of-service", component: Tos },
     ],
 });
 
