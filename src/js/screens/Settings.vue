@@ -9,18 +9,18 @@
             </div>
 
             <div class="flex mt-4 mb-1">
-                <a @click.prevent="active_tab='game'"
+                <button @click.prevent="active_tab='game'"
                     class="bg-gray-800 hover:bg-gray-900 px-6 py-3 rounded"
                     :class="{'bg-gray-900 cursor-default pointer-events-none': active_tab==='game'}"
-                    href="#">Game</a>
-                <a @click.prevent="active_tab='users'"
+                    >Game</button>
+                <button @click.prevent="active_tab='users'"
                     class="bg-gray-800 hover:bg-gray-900 px-6 py-3 rounded ml-1"
                     :class="{'bg-gray-900 cursor-default pointer-events-none': active_tab==='users'}"
-                    href="#">Users</a>
-                <a @click.prevent="active_tab='data'"
+                    >Users</button>
+                <button @click.prevent="active_tab='data'"
                     class="bg-gray-800 hover:bg-gray-900 px-6 py-3 rounded ml-1"
                     :class="{'bg-gray-900 cursor-default pointer-events-none': active_tab==='data'}"
-                    href="#">Data</a>
+                    >Data</button>
             </div>
 
             <div v-if="active_tab==='game'" class="w-full bg-gray-900 rounded p-4">
@@ -60,16 +60,16 @@
             </div>
             <div v-if="active_tab==='users'" class="w-full bg-gray-900 rounded p-4">
                 <h2 class="text-xl">Users</h2>
-                <label for="should-shuffle" class="block cursor-pointer mt-2"><input class="cursor-pointer" v-model="game.should_shuffle_users" type="checkbox" id="should-shuffle"> Shuffle Users On Game Start</label>
+                <label for="should-shuffle" class="block cursor-pointer mt-2"><input class="cursor-pointer" v-model="game.should_shuffle_users" type="checkbox" id="should-shuffle"> Shuffle users on game start</label>
                 <div v-if="!game.can_change_settings" class="mt-2 text-red-400 text-xl underline">You cannot change the users when a game is active!</div>
                 <form method="POST" action="#" @submit.stop.prevent="add_user" class="mt-4 flex" v-if="game.can_change_settings">
                     <input v-model="user_name_input" placeholder="User name" class="bg-gray-700 flex-shrink min-w-0 px-4 py-3 rounded text-white">
-                    <input @click.stop.prevent="add_user" type="submit" class="bg-green-600 hover:bg-green-700 ml-1 px-4 py-3 rounded cursor-pointer">
+                    <input @click.stop.prevent="add_user" type="submit" class="bg-green-600 hover:bg-green-700 ml-1 px-4 py-3 rounded cursor-pointer" value="Add user">
                 </form>
                 <div class="mt-4" v-if="game.users.length > 0">
                     <div v-for="(user,i) in game.users" :key="user.name" class="flex items-center justify-between px-4 py-4 bg-gray-700 first:rounded-t last:rounded-b" :class="{'bg-gray-800': i%2!=0}">
                         <div class="py-3">{{user.name}}</div>
-                        <a href="#" @click.stop.prevent="remove_user(user)" class="bg-red-600 hover:bg-red-700 px-4 py-3 rounded" v-if="game.can_change_settings">remove user</a>
+                        <button @click.stop.prevent="remove_user(user)" class="bg-red-600 hover:bg-red-700 px-4 py-3 rounded" v-if="game.can_change_settings">Remove user</button>
                     </div>
                 </div>
             </div>

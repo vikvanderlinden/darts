@@ -6,7 +6,7 @@
                 <div class="text-6xl">{{game.current_player.updated_score}}</div>
                 <div class="text-blue-400">Now: {{game.current_player.name}}</div>
             </div>
-            <div class="w-full ml-4 text-xl w-3/5">
+            <div class="ml-4 text-xl w-3/5">
                 <table class="w-full">
                     <tr
                         v-for="(user,index) in game.users" :key="user.name"

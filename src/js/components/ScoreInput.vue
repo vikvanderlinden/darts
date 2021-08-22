@@ -11,24 +11,24 @@
                 :class="{'pointer-events-none opacity-50': in_disabled(['triple', 'multipliers', 'inputs'])}"
                 @click="toggle_score_multiplier(3)"
                 title="Triple"></StickyButton>
-            <a class="score-btn flex-1 red-btn"
+            <button class="score-btn flex-1 red-btn"
                 @click.stop.prevent="emit_miss()"
                 :class="{'pointer-events-none opacity-50': in_disabled(['miss', 'inputs'])}"
-                href="#">Miss</a>
+                >Miss</button>
         </div>
         <div v-for="i in [0,1,2,3]" :key="i" class="flex justify-between mt-4">
-            <a class="score-btn"
+            <button class="score-btn"
                 v-for="j in [1,2,3,4,5]"
                 :key="5*i+j"
                 :class="{'pointer-events-none opacity-50': in_disabled([5*i+j, 'inputs'])}"
                 @click.stop.prevent="emit_score(5*i+j)"
-                href="#">{{ 5*i + j }}</a>
+                >{{ 5*i + j }}</button>
         </div>
         <div class="flex gap-2 mt-4">
-            <a class="score-btn flex-1 red-btn" :class="{'pointer-events-none opacity-50': in_disabled(['del', 'actions'])}" @click.stop.prevent="emit_del()" href="#">Del</a>
-            <a class="score-btn flex-1" :class="{'pointer-events-none opacity-50': in_disabled(['ob', 'b', 'inputs'])}" @click.stop.prevent="emit_bull(1)" href="#">Outer</a>
-            <a class="score-btn flex-1" :class="{'pointer-events-none opacity-50': in_disabled(['ib', 'b', 'inputs'])}" @click.stop.prevent="emit_bull(2)" href="#">Bull</a>
-            <a class="score-btn flex-1 green-btn" :class="{'pointer-events-none opacity-50': in_disabled(['del', 'actions'])}" @click.stop.prevent="emit_next()" href="#">></a>
+            <button class="score-btn flex-1 red-btn" :class="{'pointer-events-none opacity-50': in_disabled(['del', 'actions'])}" @click.stop.prevent="emit_del()">Del</button>
+            <button class="score-btn flex-1" :class="{'pointer-events-none opacity-50': in_disabled(['ob', 'b', 'inputs'])}" @click.stop.prevent="emit_bull(1)">Outer</button>
+            <button class="score-btn flex-1" :class="{'pointer-events-none opacity-50': in_disabled(['ib', 'b', 'inputs'])}" @click.stop.prevent="emit_bull(2)">Bull</button>
+            <button class="score-btn flex-1 green-btn" :class="{'pointer-events-none opacity-50': in_disabled(['del', 'actions'])}" @click.stop.prevent="emit_next()">></button>
         </div>
     </div>
 </template>
