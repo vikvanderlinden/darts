@@ -93,8 +93,8 @@ export default class OhOneGames implements Variant {
 
     register_bull(game: Game, multiplier: number): void {
         game.register_score({
-            multiplier: 1,
-            value: multiplier * 25
+            multiplier: multiplier,
+            value: 25
         });
     }
 
@@ -150,7 +150,10 @@ export default class OhOneGames implements Variant {
             3: 'T'
         };
 
-        let mapper = (s: Score) => `${multipliers[s.multiplier]}${s.value.toString()}`;
+        let mapper = (s: Score) => {
+            let value: string = (s.value == 25) ? "B" : s.value.toString();
+            return `${multipliers[s.multiplier]}${value}`;
+        }
         let calculation: string =
             user.current_turn
                 .map(mapper)

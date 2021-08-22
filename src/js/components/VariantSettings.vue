@@ -3,7 +3,8 @@
         <div class="text-lg">Game variant settings</div>
         <div v-if="Object.keys(settings['boolean']).length + Object.keys(settings['selection']).length === 0">No settings available for this variant</div>
         <div v-for="(boolsetting,id) in settings['boolean']" :key="id">
-            <label class="block mt-2 cursor-pointer" :for="id">
+            <label class="block mt-2 cursor-pointer" :for="id"
+                :class="{'cursor-default pointer-events-none': !can_update}">
                 <input
                     type="checkbox"
                     :id="id"
