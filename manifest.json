@@ -1,5 +1,6 @@
 {
-  "main.css": "automain.css?1af45f374a7798dd04b3",
-  "main.js": "automain.js?fa0da771a6cc1359dbd9",
-  "index.html": "autoindex.html"
+  "main.css": "automain.css?337780f4b687b5e44b9f",
+  "main.js": "automain.js?15b05923947df80626e4",
+  "index.html": "autoindex.html",
+  "service-worker.js": "autoservice-worker.js"
 }
