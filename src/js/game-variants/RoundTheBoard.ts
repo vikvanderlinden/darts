@@ -3,7 +3,7 @@ import Game from "./../models/Game";
 import { User } from "./../models/User";
 import { BooleanSetting, Score, SelectionSetting } from "../datatypes";
 
-export default class RoundTheBoard implements Variant {
+export default class RoundTheBoard extends Variant {
     private _id: string = "round-the-board";
     private _human_name: string = "Round the Board";
 
@@ -15,6 +15,7 @@ export default class RoundTheBoard implements Variant {
     private _selection_settings: Record<string,SelectionSetting> = {};
 
     constructor() {
+        super();
         this.register();
     }
 

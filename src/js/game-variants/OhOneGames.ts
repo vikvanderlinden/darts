@@ -3,7 +3,7 @@ import Game from "./../models/Game";
 import { User } from "./../models/User";
 import { BooleanSetting, Score, SelectionSetting } from "../datatypes";
 
-export default class OhOneGames implements Variant {
+export default class OhOneGames extends Variant {
     private _id = "01-games";
     private _human_name = "'01 Games";
 
@@ -33,8 +33,9 @@ export default class OhOneGames implements Variant {
     };
 
     constructor(init_score?: number) {
-        this._init_score = init_score ?? 501;
+        super();
 
+        this._init_score = init_score ?? 501;
         this.register();
     }
 
@@ -64,10 +65,6 @@ export default class OhOneGames implements Variant {
 
     get selection_settings(): Record<string,SelectionSetting> {
         return this._selection_settings;
-    }
-
-    register(): void {
-        Game.register_variant(this);
     }
 
     toggle_bool(id: string): void {
